@@ -34,9 +34,10 @@ Tô Anh Đức - sinh viên khóa 4
 
 ## Phân công có tên
 
-| Phần việc                           | Người phụ trách       |
-| ------------------------------------- | ------------------------- |
-| Mining data và kiểm chứng evidence | Nguyễn Thị Minh Tiến   |
-| Thiết kế flow/mock prototype        | Phan Thị Khánh Linh     |
-| Prompt, logic nhóm và xếp hạng    | Trương Hoàng Thành An |
-| Golden set, test và demo             | Phạm Anh Minh            |
+
+| Họ và Tên              | Mã Học Viên | Vai trò chính | Phần việc đảm nhiệm trong dự án |
+| ------------------------- | -------------- | --------------- | -------------------------------------- |
+| Trương Hoàng Thành An | 2A202602574    | leader          | prompting                              |
+| Nguyễn Thị Minh Tiến   | 2A202602997    | dev             |                                        |
+| Phan Thị Khánh Linh     | 2A202602360    | FE              |                                        |
+| Phạm Anh Minh            | 2A202603009    | DA              |                                        |

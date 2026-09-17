@@ -4,14 +4,14 @@
 
 ## 👥 Thành viên nhóm & Phân công vai trò
 
-**Lớp:** 3B · **Phòng:** C403 · **Cụm:** ____ · **Track:** ____
+**Lớp:** 3B · **Phòng:** C403 · **Cụm:** c3 · **Track:** B
 
 | Họ và Tên              | Mã Học Viên | Vai trò chính | Phần việc đảm nhiệm trong dự án |
 | ------------------------- | -------------- | --------------- | -------------------------------------- |
-| Trương Hoàng Thành An | 2A202602574    | leader          |                                        |
-| Nguyễn Thị Minh Tiến   | 2A202602997    |                 |                                        |
-| Phan Thị Khánh Linh     | 2A202602360    |                 |                                        |
-| Phạm Anh Minh            | 2A202603009    |                 |                                        |
+| Trương Hoàng Thành An | 2A202602574    | leader          | lên idea, prompting                   |
+| Nguyễn Thị Minh Tiến   | 2A202602997    | dev             | code dự án                           |
+| Phan Thị Khánh Linh     | 2A202602360    | FE              | tạo demo app                          |
+| Phạm Anh Minh            | 2A202603009    | QA              | tạo testcase                          |
 
 > Nhóm copy nguyên file README này về repo của mình, rồi điền bảng trên. Cột **Phần việc đảm nhiệm** ghi càng cụ thể càng tốt.
 
