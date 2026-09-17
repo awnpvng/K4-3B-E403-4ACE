@@ -1,22 +1,36 @@
 
-1/ Job executor
-Học viên và TA/labcoach trong Discord cần nhanh biết “câu hỏi nào đang hot / chưa ai trả lời / cần ưu tiên”, thay vì đọc từng tin và mất thời gian.
+## Track, đề
 
-2/ Pain
-Trong server chung, lượng tin nhắn rất lớn, nhiều câu hỏi logistics và lặp lại; TA/labcoach  không kịp tổng hợp, học viên muốn hỏi nhưng phải đợi câu trả lời trong khi đã có trường hợp có solution trước đó nhưng họ không thấy. Kết quả là thông tin tràn lan, câu hỏi lặp lại, và phản hồi chậm.
+**Track B - B2: Tính năng mới cho TA/học viên trong Discord.**
 
-3/ Pain + evidence
-Trong data Discord pack, phần lớn tin nhắn là hỏi hành chính như deadline, standup, XP, ticket, team. Bot hiện tại chỉ tổng hợp theo cách rất sơ sài, chưa ưu tiên câu hỏi nào quan trọng nhất. Đây là bằng chứng rằng cần có một chức năng lọc và ranking câu hỏi.
+## Job executor
 
-4 /Lát cắt
-Một TA vào cuối ngày muốn biết “Top 10 câu hỏi nhiều người hỏi nhất / câu nào chưa được trả lời”, và bot xuất ra danh sách ưu tiên để giải quyết ngay.
+**Một TA/labcoach vào cuối ngày, trong server Discord chung, cần biết câu hỏi nào đang nóng và câu nào chưa được trả lời để chọn việc cần xử lý trước.**
 
-5/ Solution
-Bot AI tổng hợp các câu hỏi trong Discord, nhóm theo chủ đề, đếm tần suất, phát hiện câu hỏi chưa có phản hồi, và hiển thị leaderboard theo mức độ nóng / ưu tiên.
+## Pain một câu
 
+**TA/labcoach đang rà lại nhiều tin nhắn Discord, nhưng không biết câu hỏi nào bị lặp hoặc còn tồn, nên mất thời gian tổng hợp và có thể bỏ sót câu hỏi cần trả lời sớm.**
 
-6/ Users / willing users
-Người dùng chính: học viên, TA, mod. Sẵn sàng thử: TA và vài học viên đang có nhu cầu dùng Discord làm kênh hỏi đáp.
+## 1-2 bằng chứng đầu
 
-7/ Why now
-Server chung của nhiều lớp khiến thông tin bị rải và lặp; nếu không có công cụ tổng hợp, việc xác định “câu hỏi nào cần ưu tiên” sẽ rất chậm và dễ bỏ sót.
+1. **1.092 tin nhắn** trong Discord pack giai đoạn 12-14/09/2026, gồm **779 tin từ người và 313 tin từ bot**. Cách đếm: đọc `k4_messages.csv`, đếm tổng số dòng dữ liệu và nhóm theo cột `is_bot`.
+2. Pack có **4 bản tin ngày** do bot đang chạy thật. Khi đối chiếu `k4_daily_reports.md`, bản tin có lỗi tóm tắt/cắt cụt và chưa cho TA một thứ hạng rõ ràng giữa câu hỏi nóng với câu hỏi chưa được trả lời.
+
+## Lát cắt MỘT CÂU
+
+**Một TA cuối ngày muốn xử lý câu hỏi tồn trong Discord; AI nhóm các câu hỏi tương tự, xếp hạng mức độ ưu tiên và chỉ ra câu chưa được trả lời sau 4 giờ; TA nhận được danh sách ưu tiên kèm link tin nhắn để trả lời.**
+
+## AI tự làm đến đâu
+
+**AI tự nhóm câu hỏi tương tự, đếm số lần lặp, phát hiện câu chưa có phản hồi và xếp hạng ưu tiên; AI không tự gửi tin nhắn, không nêu danh tính học viên và không quyết định thay TA vì mọi hành động phản hồi cần người duyệt.**
+
+Willing users dự kiến: **[Tên TA/labcoach 1]**, **[Tên TA/labcoach 2]**, **[Tên học viên/TA 3]** đồng ý thử prototype ngoài nhóm.
+
+## Phân công có tên
+
+| Phần việc                           | Người phụ trách       |
+| ------------------------------------- | ------------------------- |
+| Mining data và kiểm chứng evidence | Nguyễn Thị Minh Tiến   |
+| Thiết kế flow/mock prototype        | Phan Thị Khánh Linh     |
+| Prompt, logic nhóm và xếp hạng    | Trương Hoàng Thành An |
+| Golden set, test và demo             | Phạm Anh Minh            |
