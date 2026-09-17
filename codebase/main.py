@@ -71,16 +71,16 @@ def run_pipeline(use_ai: bool = True, sample_size: int = None) -> Dict:
     clusters = questions['cluster_id'].nunique()
     print(f"   Clusters formed: {clusters}")
 
-    # Get representative questions
-    questions['representative'] = questions.apply(
-        lambda x: get_representative(x, questions), axis=1
-    )
-
     # ===== STEP 5: RESPONSE DETECTION =====
     print("\n💬 [STEP 5] Response Detection...")
     questions = detect_response_status(questions, df)
     status_counts = questions['status'].value_counts()
     print(f"   Status: {dict(status_counts)}")
+
+    # Get representative questions (after status is available)
+    questions['representative'] = questions.apply(
+        lambda x: get_representative(x, questions), axis=1
+    )
 
     # ===== STEP 6: SCORING & RANKING =====
     print("\n🧠 [STEP 6] Scoring & Ranking...")
