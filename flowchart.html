@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discord Q&A Pipeline - Light Theme Flowchart</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .toolbar {
+      position: absolute;
+      top: 12px;
+      right: 24px;
+      z-index: 50;
+      display: flex;
+      gap: 12px;
+    }
+    .btn-download {
+      background: #4f46e5;
+      color: #ffffff;
+      border: 1px solid #4338ca;
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+      transition: all 0.2s ease;
+    }
+    .btn-download:hover {
+      background: #4338ca;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+    }
+    .canvas-wrapper {
+      width: 98vw;
+      height: 94vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    canvas {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <button class="btn-download" onclick="downloadPNG()">💾 Tải ảnh PNG (Nền trắng nét cao)</button>
+  </div>
+
+  <div class="canvas-wrapper">
+    <canvas id="pipelineCanvas"></canvas>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("pipelineCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Kích thước chuẩn Landscape 16:9
+    const W = 1680;
+    const H = 960;
+    const dpr = window.devicePixelRatio || 2;
+
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = W + "px";
+    canvas.style.height = H + "px";
+    ctx.scale(dpr, dpr);
+
+    // Bảng màu Light Theme độ tương phản cao
+    const C = {
+      bg: "#ffffff",
+      grid: "#f1f5f9",
+      arrow: "#64748b",
+      arrowHead: "#334155",
+      textDark: "#0f172a",
+      textSub: "#475569",
+      textDim: "#64748b",
+
+      // AI Nodes
+      aiBg: "#ffffff",
+      aiBorder: "#c084fc",
+      aiTagBg: "#f3e8ff",
+      aiTagBorder: "#d8b4fe",
+      aiTagText: "#6b21a8",
+
+      // Rule / Logic Nodes
+      ruleBg: "#ffffff",
+      ruleBorder: "#cbd5e1",
+      ruleTagBg: "#f1f5f9",
+      ruleTagBorder: "#cbd5e1",
+      ruleTagText: "#334155",
+
+      // Subgraph Containers (Pastel nhẹ, viền rõ nét)
+      subInput:  { bg: "#f8fdfa", border: "#86efac", header: "#dcfce7", title: "#166534" },
+      subParse:  { bg: "#f8fafc", border: "#94a3b8", header: "#f1f5f9", title: "#1e293b" },
+      subAI:     { bg: "#faf5ff", border: "#d8b4fe", header: "#f3e8ff", title: "#6b21a8" },
+      subDetect: { bg: "#fffbeb", border: "#fcd34d", header: "#fef3c7", title: "#92400e" },
+      subOutput: { bg: "#fdf2f8", border: "#f472b6", header: "#fce7f3", title: "#9d174d" }
+    };
+
+    function drawRoundRect(x, y, w, h, r, fill, stroke, strokeW = 1.2) {
+      ctx.beginPath();
+      ctx.roundRect(x, y, w, h, r);
+      if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+      if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = strokeW; ctx.stroke(); }
+    }
+
+    // Huy hiệu AI hoặc Rule
+    function drawBadge(x, y, text, type = "AI") {
+      ctx.font = "600 11px system-ui, sans-serif";
+      const tw = ctx.measureText(text).width;
+      const bw = tw + 14;
+      const bh = 22;
+
+      const isAI = type === "AI";
+      const bg = isAI ? C.aiTagBg : C.ruleTagBg;
+      const border = isAI ? C.aiTagBorder : C.ruleTagBorder;
+      const color = isAI ? C.aiTagText : C.ruleTagText;
+
+      drawRoundRect(x, y - bh / 2, bw, bh, 6, bg, border, 1);
+      ctx.fillStyle = color;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, x + bw / 2, y);
+      return bw;
+    }
+
+    // Subgraph Container
+    function drawSubgraph(x, y, w, h, title, style, tagText = null, tagType = "RULE") {
+      drawRoundRect(x, y, w, h, 14, style.bg, style.border, 1.4);
+      ctx.font = "bold 12.5px system-ui, sans-serif";
+      const tw = ctx.measureText(title).width;
+
+      drawRoundRect(x + 18, y - 13, tw + 26, 26, 6, style.header, style.border, 1.2);
+      ctx.fillStyle = style.title;
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText(title, x + 31, y);
+
+      if (tagText) {
+        drawBadge(x + tw + 52, y, tagText, tagType);
+      }
+    }
+
+    // Node dạng thẻ: Chữ trái, badge phải
+    function drawCardNode(x, y, w, h, title, sub = "", badge = "", isAI = false) {
+      const fill = isAI ? C.aiBg : C.ruleBg;
+      const stroke = isAI ? C.aiBorder : C.ruleBorder;
+      drawRoundRect(x, y, w, h, 8, fill, stroke, 1.3);
+
+      // Shadow nhẹ cho thẻ nổi trên nền trắng
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      if (!sub) {
+        ctx.font = "600 13px system-ui, sans-serif";
+        ctx.fillStyle = C.textDark;
+        ctx.fillText(title, x + 16, y + h / 2);
+      } else {
+        ctx.font = "600 13px system-ui, sans-serif";
+        ctx.fillStyle = C.textDark;
+        ctx.fillText(title, x + 16, y + h / 2 - 9);
+
+        ctx.font = "400 11.5px system-ui, sans-serif";
+        ctx.fillStyle = C.textSub;
+        ctx.fillText(sub, x + 16, y + h / 2 + 10);
+      }
+
+      // Badge bên phải
+      if (badge) {
+        ctx.font = "600 11px system-ui, sans-serif";
+        const bw = ctx.measureText(badge).width + 14;
+        drawBadge(x + w - bw - 14, y + h / 2, badge, isAI ? "AI" : "RULE");
+      }
+    }
+
+    // Parallelogram Node
+    function drawParallelogram(x, y, w, h, lines, isAI = false) {
+      const sk = 12;
+      ctx.beginPath();
+      ctx.moveTo(x + sk, y);
+      ctx.lineTo(x + w, y);
+      ctx.lineTo(x + w - sk, y + h);
+      ctx.lineTo(x, y + h);
+      ctx.closePath();
+      ctx.fillStyle = isAI ? C.aiBg : C.ruleBg;
+      ctx.fill();
+      ctx.strokeStyle = isAI ? C.aiBorder : C.ruleBorder;
+      ctx.lineWidth = 1.3;
+      ctx.stroke();
+
+      ctx.fillStyle = C.textDark;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = "500 12.5px system-ui, sans-serif";
+
+      if (lines.length === 1) {
+        ctx.fillText(lines[0], x + w / 2, y + h / 2);
+      } else {
+        const startY = y + h / 2 - (lines.length - 1) * 9.5;
+        lines.forEach((l, i) => {
+          ctx.fillText(l, x + w / 2, startY + i * 19);
+        });
+      }
+    }
+
+    // Diamond Decision Node
+    function drawDiamond(cx, cy, w, h, lines, badge = null, isAI = false) {
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - h / 2);
+      ctx.lineTo(cx + w / 2, cy);
+      ctx.lineTo(cx, cy + h / 2);
+      ctx.lineTo(cx - w / 2, cy);
+      ctx.closePath();
+      ctx.fillStyle = isAI ? C.aiBg : C.ruleBg;
+      ctx.fill();
+      ctx.strokeStyle = isAI ? C.aiBorder : C.ruleBorder;
+      ctx.lineWidth = 1.3;
+      ctx.stroke();
+
+      ctx.fillStyle = C.textDark;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = "600 12px system-ui, sans-serif";
+      const startY = cy - (lines.length - 1) * 9;
+      lines.forEach((l, i) => {
+        ctx.fillText(l, cx, startY + i * 18);
+      });
+
+      if (badge) {
+        drawBadge(cx - 30, cy - h / 2 - 1, badge, isAI ? "AI" : "RULE");
+      }
+    }
+
+    // Arrow Helpers
+    function drawArrow(fromX, fromY, toX, toY, label = "") {
+      const headlen = 8;
+      const angle = Math.atan2(toY - fromY, toX - fromX);
+
+      ctx.beginPath();
+      ctx.moveTo(fromX, fromY);
+      ctx.lineTo(toX, toY);
+      ctx.strokeStyle = C.arrow;
+      ctx.lineWidth = 1.8;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(toX, toY);
+      ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.fillStyle = C.arrowHead;
+      ctx.fill();
+
+      if (label) {
+        const midX = (fromX + toX) / 2;
+        const midY = (fromY + toY) / 2;
+        ctx.font = "600 11px system-ui, sans-serif";
+        const tw = ctx.measureText(label).width;
+        drawRoundRect(midX - tw / 2 - 6, midY - 9, tw + 12, 18, 4, "#ffffff", "#cbd5e1", 1);
+        ctx.fillStyle = C.textSub;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(label, midX, midY);
+      }
+    }
+
+    function drawElbowArrow(points, label = "", labelOffset = { x: 0, y: 0 }) {
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.strokeStyle = C.arrow;
+      ctx.lineWidth = 1.8;
+      ctx.stroke();
+
+      const last = points[points.length - 1];
+      const prev = points[points.length - 2];
+      const headlen = 8;
+      const angle = Math.atan2(last.y - prev.y, last.x - prev.x);
+
+      ctx.beginPath();
+      ctx.moveTo(last.x, last.y);
+      ctx.lineTo(last.x - headlen * Math.cos(angle - Math.PI / 6), last.y - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(last.x - headlen * Math.cos(angle + Math.PI / 6), last.y - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.fillStyle = C.arrowHead;
+      ctx.fill();
+
+      if (label && points.length >= 2) {
+        const lx = (points[0].x + points[1].x) / 2 + labelOffset.x;
+        const ly = (points[0].y + points[1].y) / 2 + labelOffset.y;
+        ctx.font = "600 11px system-ui, sans-serif";
+        const tw = ctx.measureText(label).width;
+        drawRoundRect(lx - tw / 2 - 6, ly - 9, tw + 12, 18, 4, "#ffffff", "#cbd5e1", 1);
+        ctx.fillStyle = C.textSub;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(label, lx, ly);
+      }
+    }
+
+    // ==========================================
+    // VẼ NỀN VÀ KHUNG CHÍNH
+    // ==========================================
+    ctx.fillStyle = C.bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Lưới chấm thanh lịch
+    ctx.fillStyle = "#e2e8f0";
+    for (let gx = 16; gx < W; gx += 26) {
+      for (let gy = 16; gy < H; gy += 26) {
+        ctx.fillRect(gx, gy, 1.5, 1.5);
+      }
+    }
+
+    // Header chính
+    ctx.font = "bold 20px system-ui, sans-serif";
+    ctx.fillStyle = C.textDark;
+    ctx.textAlign = "left";
+    ctx.fillText("⚡ DISCORD Q&A INTELLIGENCE PIPELINE", 40, 46);
+
+    ctx.font = "500 13px system-ui, sans-serif";
+    ctx.fillStyle = C.textDim;
+    ctx.fillText(" Bot gom nhóm câu hỏi, xếp hạng hot/chưa trả lời, hiển thị leaderboard", 480, 46);
+
+    // Chú thích (Legend)
+    const legX = 1140;
+    const legY = 38;
+    drawRoundRect(legX, legY - 17, 300, 34, 8, "#ffffff", "#e2e8f0", 1.2);
+    ctx.font = "600 11.5px system-ui, sans-serif";
+    ctx.fillStyle = C.textDim;
+    ctx.fillText("CHÚ THÍCH:", legX + 12, legY);
+    drawBadge(legX + 85, legY, "✨ AI-Powered", "AI");
+    drawBadge(legX + 195, legY, "⚙️ Rule / Logic", "RULE");
+
+    // =========================================================================
+    // HÀNG 1: Ingestion & AI Enrichment (y: 85 -> 480)
+    // =========================================================================
+
+    // 1. INPUT
+    drawSubgraph(40, 85, 230, 395, "📥 INPUT", C.subInput, "⚙️ Ingestion", "RULE");
+    drawCardNode(55, 170, 200, 60, "Discord Messages", "Real-time stream", "STREAM", false);
+    drawCardNode(55, 305, 200, 60, "File CSV", "Dữ liệu backup / batch", "BATCH", false);
+
+    // 2. PARSE & FILTER
+    drawSubgraph(320, 85, 300, 395, "🔧 1. PARSE & FILTER", C.subParse, "⚙️ Rule-based", "RULE");
+    drawParallelogram(335, 140, 270, 52, ["Filter: is_bot = False"], false);
+    drawParallelogram(335, 240, 270, 52, ["Filter: có dấu '?'"], false);
+    drawParallelogram(335, 340, 270, 60, ["Extract: msg_id, content,", "timestamp, guild"], false);
+
+    // Mũi tên INPUT -> P1
+    drawElbowArrow([{x: 255, y: 200}, {x: 290, y: 200}, {x: 290, y: 166}, {x: 335, y: 166}]);
+    drawElbowArrow([{x: 255, y: 335}, {x: 290, y: 335}, {x: 290, y: 166}, {x: 335, y: 166}]);
+    drawArrow(470, 192, 470, 240);
+    drawArrow(470, 292, 470, 340);
+
+    // 3. INTENT CLASSIFICATION
+    drawSubgraph(670, 85, 460, 395, "🧠 2. INTENT CLASSIFICATION", C.subAI, "✨ Hybrid AI", "AI");
+    drawDiamond(785, 205, 200, 85, ["Rule-based", "keyword match?"], "⚙️ Rule", false);
+
+    // LLM Fallback Node
+    drawCardNode(695, 335, 180, 62, "LLM Fallback", "Khi không khớp keyword", "✨ LLM", true);
+
+    // Intent Tags Box
+    drawRoundRect(945, 225, 165, 100, 8, "#ffffff", C.aiBorder, 1.2);
+    ctx.fillStyle = C.aiTagText;
+    ctx.font = "600 11.5px system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Intent Tags:", 945 + 165 / 2, 245);
+    ctx.fillStyle = C.textDark;
+    ctx.font = "500 11.5px system-ui, sans-serif";
+    ctx.fillText("deadline • xp • team", 945 + 165 / 2, 272);
+    ctx.fillText("lab • github • attendance", 945 + 165 / 2, 296);
+
+    // Mũi tên P1 -> AI1
+    drawElbowArrow([{x: 605, y: 370}, {x: 640, y: 370}, {x: 640, y: 205}, {x: 685, y: 205}]);
+    drawArrow(885, 205, 945, 250, "Yes");
+    drawArrow(785, 247, 785, 335, "No");
+    drawElbowArrow([{x: 875, y: 366}, {x: 945, y: 366}, {x: 945, y: 325}]);
+
+    // 4. QUESTION CLUSTERING
+    drawSubgraph(1180, 85, 460, 395, "🧠 3. QUESTION CLUSTERING", C.subAI, "✨ AI-Powered", "AI");
+    drawCardNode(1205, 140, 410, 58, "Semantic Similarity", "Cosine distance trên Embedding vector", "✨ Vector", true);
+    drawCardNode(1205, 240, 410, 58, "Merge câu hỏi tương tự", "Nhóm các biến thể câu hỏi cùng ý nghĩa", "✨ Cluster", true);
+    drawCardNode(1205, 340, 410, 58, "Representative Question", "Trích xuất câu hỏi tiêu biểu đại diện", "✨ Synth", true);
+
+    // Mũi tên AI1 -> AI2
+    drawElbowArrow([{x: 1110, y: 275}, {x: 1145, y: 275}, {x: 1145, y: 169}, {x: 1205, y: 169}]);
+    drawArrow(1410, 198, 1410, 240);
+    drawArrow(1410, 298, 1410, 340);
+
+    // =========================================================================
+    // DÂY LIÊN TẦNG HÀNG 1 -> HÀNG 2
+    // =========================================================================
+    drawElbowArrow(
+      [
+        {x: 1410, y: 398},
+        {x: 1410, y: 508},
+        {x: 65, y: 508},
+        {x: 65, y: 640},
+        {x: 85, y: 640}
+      ],
+      "Clustered Questions",
+      {x: -400, y: 0}
+    );
+
+    // =========================================================================
+    // HÀNG 2: Detection, Scoring & Delivery (y: 535 -> 930)
+    // =========================================================================
+
+    // 5. RESPONSE DETECTION
+    drawSubgraph(40, 535, 460, 395, "💬 4. RESPONSE DETECTION", C.subDetect, "⚙️ Logic Check", "RULE");
+    drawDiamond(185, 640, 195, 86, ["Check reply_to", "có reply chưa?"], "⚙️ Metadata", false);
+    drawDiamond(185, 805, 190, 82, ["Reply từ", "Bot | TA | Mod?"], "⚙️ Role Check", false);
+
+    // Status Box
+    drawRoundRect(315, 690, 165, 130, 8, "#ffffff", C.ruleBorder, 1.2);
+    ctx.font = "600 11px system-ui, sans-serif";
+    ctx.fillStyle = C.textDim;
+    ctx.textAlign = "center";
+    ctx.fillText("MESSAGE STATUS", 315 + 165 / 2, 712);
+
+    function drawMiniStatus(px, py, label, bg, border, color) {
+      drawRoundRect(px, py, 135, 24, 5, bg, border, 1);
+      ctx.fillStyle = color;
+      ctx.font = "600 11px system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(label, px + 135 / 2, py + 12);
+    }
+    drawMiniStatus(330, 726, "✓ answered", "#dcfce7", "#86efac", "#15803d");
+    drawMiniStatus(330, 756, "⚠ partial", "#fef3c7", "#fcd34d", "#b45309");
+    drawMiniStatus(330, 786, "✕ unanswered", "#ffe4e6", "#fca5a5", "#be123c");
+
+    // Mũi tên E1 -> E2 -> E3
+    drawArrow(185, 683, 185, 764, "Có reply");
+    drawElbowArrow([{x: 280, y: 805}, {x: 315, y: 805}]);
+    drawElbowArrow([{x: 282, y: 640}, {x: 375, y: 640}, {x: 375, y: 690}], "Không reply", {x: 14, y: 0});
+
+    // 6. SCORING & RANKING
+    drawSubgraph(550, 535, 460, 395, "🧠 5. SCORING & RANKING", C.subAI, "✨ Heuristic AI", "AI");
+    drawCardNode(575, 580, 410, 50, "Frequency Score", "Đếm tần suất câu hỏi lặp lại trong cluster", "⚙️ Count", false);
+    drawCardNode(575, 655, 410, 50, "Urgency Weight", "Trọng số ưu tiên cho chủ đề cận deadline", "✨ Weight", true);
+    drawCardNode(575, 730, 410, 50, "Freshness Score", "Hàm suy giảm thời gian (Time-decay)", "⚙️ Decay", false);
+    drawCardNode(575, 805, 410, 50, "Unanswered Penalty", "Cộng điểm ưu tiên cho câu hỏi chưa giải đáp", "✨ Priority", true);
+
+    // Mũi tên P2 -> AI3
+    drawElbowArrow([{x: 480, y: 755}, {x: 525, y: 755}, {x: 525, y: 605}, {x: 575, y: 605}]);
+    drawArrow(780, 630, 780, 655);
+    drawArrow(780, 705, 780, 730);
+    drawArrow(780, 780, 780, 805);
+
+    // 7. OUTPUT
+    drawSubgraph(1060, 535, 580, 395, "📤 OUTPUT", C.subOutput, "⚙️ Presentation", "RULE");
+
+    // Leaderboard Node
+    drawRoundRect(1090, 605, 520, 65, 8, "#ffffff", "#f472b6", 1.4);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = "bold 14px system-ui, sans-serif";
+    ctx.fillStyle = "#9d174d";
+    ctx.fillText("Leaderboard Top Questions", 1090 + 520 / 2, 628);
+    ctx.font = "500 11.5px system-ui, sans-serif";
+    ctx.fillStyle = C.textSub;
+    ctx.fillText("Tổng hợp câu hỏi hot nhất & gửi cảnh báo Real-time", 1090 + 520 / 2, 648);
+
+    // 3 Slash Command Buttons
+    const cmdW = 155;
+    const cmdGap = 27;
+    const cmdStartX = 1090;
+
+    function drawCmdBox(cx, cy, cmd, desc) {
+      drawRoundRect(cx, cy, cmdW, 58, 8, "#ffffff", "#fbcfe8", 1.2);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = "bold 12.5px monospace";
+      ctx.fillStyle = "#be185d";
+      ctx.fillText(cmd, cx + cmdW / 2, cy + 20);
+      ctx.font = "500 11px system-ui, sans-serif";
+      ctx.fillStyle = C.textSub;
+      ctx.fillText(desc, cx + cmdW / 2, cy + 40);
+    }
+
+    drawCmdBox(cmdStartX, 765, "/leaderboard", "Xem BXH câu hỏi");
+    drawCmdBox(cmdStartX + cmdW + cmdGap, 765, "/unanswered", "Câu chưa trả lời");
+    drawCmdBox(cmdStartX + 2 * (cmdW + cmdGap), 765, "/trend", "Chủ đề đang hot");
+
+    // Mũi tên AI3 -> OUTPUT
+    drawElbowArrow([{x: 985, y: 830}, {x: 1025, y: 830}, {x: 1025, y: 637}, {x: 1090, y: 637}]);
+
+    // Mũi tên từ Leaderboard xuống 3 Commands
+    drawElbowArrow([{x: 1350, y: 670}, {x: 1350, y: 715}, {x: cmdStartX + cmdW / 2, y: 715}, {x: cmdStartX + cmdW / 2, y: 765}]);
+    drawArrow(1350, 670, 1350, 765);
+    drawElbowArrow([{x: 1350, y: 670}, {x: 1350, y: 715}, {x: cmdStartX + 2 * (cmdW + cmdGap) + cmdW / 2, y: 715}, {x: cmdStartX + 2 * (cmdW + cmdGap) + cmdW / 2, y: 765}]);
+
+    // Download PNG
+    function downloadPNG() {
+      const link = document.createElement("a");
+      link.download = "discord-qna-pipeline-light.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+  </script>
+</body>
+</html>
