@@ -24,7 +24,13 @@
 
 **AI tự nhóm câu hỏi tương tự, đếm số lần lặp, phát hiện câu chưa có phản hồi và xếp hạng ưu tiên; AI không tự gửi tin nhắn, không nêu danh tính học viên và không quyết định thay TA vì mọi hành động phản hồi cần người duyệt.**
 
-Willing users dự kiến: **[Tên TA/labcoach 1]**, **[Tên TA/labcoach 2]**, **[Tên học viên/TA 3]** đồng ý thử prototype ngoài nhóm.
+Willing users dự kiến:
+
+Đinh Lê Bình An - sinh viên khóa 3
+Hồ Hoàng Phương Anh -sinh viên khóa 4
+Tô Anh Đức - sinh viên khóa 4
+
+đồng ý thử prototype ngoài nhóm.
 
 ## Phân công có tên
 
