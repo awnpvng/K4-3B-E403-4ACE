@@ -8,13 +8,13 @@
 - **Giới hạn:** AI chỉ gợi ý và xếp hạng; không tự gửi tin nhắn, không nêu danh tính học viên và không quyết định thay TA.
 - **CP1/CP2 (đã hoàn thành):** Canvas đã có trong `canvas.md`; luồng chính đã được xác định ở CP2. Từ đây tập trung vào AI chạy thật, đo lường và chốt spec.
 
-## CP3 - Video thao tác và số đo
+## CP3 - Video thao tác và số đo **(đã hoàn thành)**
 
 **Hạn nộp:** 16:00 ngày 18/09/2026.
 
 ### Việc cần làm
 
-1. **Hoàn thiện prototype theo một luồng end-to-end**
+1. **Hoàn thiện prototype theo một luồng end-to-end  `(đã hoàn thành)`**
 
    - Nhập/chọn các tin nhắn Discord.
    - AI nhóm các câu hỏi tương tự.
@@ -22,7 +22,7 @@
    - Phát hiện câu chưa có phản hồi sau 4 giờ.
    - Hiển thị link tin nhắn để TA mở và tự trả lời.
    - Có trạng thái không chắc chắn hoặc không đủ căn cứ để không đoán bừa.
-2. **Tích hợp ít nhất một lời gọi AI thật**
+2. **Tích hợp ít nhất một lời gọi AI thật (đã hoàn thành)**
 
    - Lời gọi AI phải nằm ở quyết định trung tâm: phân nhóm câu hỏi, tóm tắt hoặc xếp hạng ưu tiên.
    - Không hardcode toàn bộ kết quả demo.
@@ -67,12 +67,12 @@ Frontend cần làm một màn hình TA có thể đi hết luồng sau:
 2. Bấm nút chạy phân tích.
 3. Hiển thị trạng thái đang xử lý/loading.
 4. Hiển thị danh sách nhóm câu hỏi, trong đó mỗi nhóm có:
-	- Câu hỏi đại diện.
-	- Số lần câu hỏi bị lặp.
-	- Chủ đề/intent.
-	- Mức ưu tiên hoặc điểm ưu tiên.
-	- Trạng thái: `unanswered`, `partial` hoặc `answered`.
-	- Mã tin nhắn hoặc link để TA mở và xử lý.
+   - Câu hỏi đại diện.
+   - Số lần câu hỏi bị lặp.
+   - Chủ đề/intent.
+   - Mức ưu tiên hoặc điểm ưu tiên.
+   - Trạng thái: `unanswered`, `partial` hoặc `answered`.
+   - Mã tin nhắn hoặc link để TA mở và xử lý.
 5. Có khu vực riêng cho câu hỏi chưa được trả lời sau 4 giờ.
 6. Có trạng thái `không chắc chắn`/`cần TA kiểm tra` khi AI thiếu căn cứ; không hiển thị kết quả như một sự thật chắc chắn.
 
@@ -86,14 +86,14 @@ Frontend phối hợp với backend/pipeline để chứng minh AI được gọ
 
 1. Dùng kết quả từ pipeline có `use_ai=True`, không chỉ dùng dữ liệu hardcode trong giao diện.
 2. Gắn kết quả AI vào ít nhất một phần chính của màn hình:
-	- intent của câu hỏi;
-	- nhóm các câu hỏi cùng ý nghĩa;
-	- tóm tắt nhóm; hoặc
-	- lý do/mức ưu tiên.
+   - intent của câu hỏi;
+   - nhóm các câu hỏi cùng ý nghĩa;
+   - tóm tắt nhóm; hoặc
+   - lý do/mức ưu tiên.
 3. Hiển thị rõ trạng thái xử lý AI:
-	- Đang phân tích.
-	- Đã phân tích.
-	- Không gọi được AI hoặc thiếu căn cứ.
+   - Đang phân tích.
+   - Đã phân tích.
+   - Không gọi được AI hoặc thiếu căn cứ.
 4. Khi AI không có kết quả, giao diện phải hiển thị fallback rõ ràng, ví dụ `Chưa đủ căn cứ - cần TA kiểm tra`, không tự bịa dữ liệu.
 5. Backend lưu log tại `logs/ai_calls.jsonl`; cần có ít nhất một entry với `status: success` để chứng minh API call thật.
 

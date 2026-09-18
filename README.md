@@ -4,12 +4,12 @@
 
 ## Team
 
-| Phần việc | Người phụ trách |
-|---|---|
-| Mining data và kiểm chứng evidence | Nguyễn Thị Minh Tiến |
-| Thiết kế flow/mock prototype | Phan Thị Khánh Linh |
-| Prompt, logic nhóm và xếp hạng | Trương Hoàng Thành An |
-| Golden set, test và demo | Phạm Anh Minh |
+| Phần việc                           | Người phụ trách       |
+| ------------------------------------- | ------------------------- |
+| Mining data và kiểm chứng evidence | Nguyễn Thị Minh Tiến   |
+| Thiết kế flow/mock prototype        | Phan Thị Khánh Linh     |
+| Prompt, logic nhóm và xếp hạng    | Trương Hoàng Thành An |
+| Golden set, test và demo             | Phạm Anh Minh            |
 
 ## Problem Statement
 
@@ -23,15 +23,15 @@
 Discord Messages → Parse & Filter → Intent Classification → Clustering → Response Detection → Scoring → Output
 ```
 
-| Step | Component | Type |
-|------|-----------|------|
-| 1 | Input (Discord messages) | ⚙️ Rule |
-| 2 | Parse & Filter | ⚙️ Rule |
-| 3 | Intent Classification | ✨ AI |
-| 4 | Question Clustering | ✨ AI |
-| 5 | Response Detection | ⚙️ Rule |
-| 6 | Scoring & Ranking | ✨ AI |
-| 7 | Output (Leaderboard) | ⚙️ Rule |
+| Step | Component                | Type      |
+| ---- | ------------------------ | --------- |
+| 1    | Input (Discord messages) | ⚙️ Rule |
+| 2    | Parse & Filter           | ⚙️ Rule |
+| 3    | Intent Classification    | ✨ AI     |
+| 4    | Question Clustering      | ✨ AI     |
+| 5    | Response Detection       | ⚙️ Rule |
+| 6    | Scoring & Ranking        | ✨ AI     |
+| 7    | Output (Leaderboard)     | ⚙️ Rule |
 
 ## Features
 
@@ -50,10 +50,10 @@ Discord Messages → Parse & Filter → Intent Classification → Clustering →
 
 ## Evaluation Results
 
-| Metric | Result | Quality Bar |
-|--------|--------|-------------|
-| Intent Accuracy | 80% (20/25) | ≥80% ✅ |
-| Status Detection | 100% (mock) | ≥85% |
+| Metric           | Result      | Quality Bar |
+| ---------------- | ----------- | ----------- |
+| Intent Accuracy  | 80% (24/25) | ≥80% ✅    |
+| Status Detection | 100% (mock) | ≥85%       |
 
 ## Project Structure
 
