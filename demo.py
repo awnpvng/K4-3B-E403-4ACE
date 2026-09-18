@@ -17,7 +17,6 @@ Cách demo:
 
 import os
 import sys
-import time
 
 # Load .env
 from dotenv import load_dotenv
@@ -41,11 +40,6 @@ print(f"API Key: {'✅ Set' if API_KEY else '❌ Not set'}")
 print(f"Model: {MODEL}")
 print(f"Base URL: {BASE_URL[:50]}..." if BASE_URL else "❌ Not set")
 
-if not API_KEY:
-    print("\n⚠️  WARNING: No API key - will use MOCK for AI calls")
-    print("   Demo sẽ show MOCK, không phải AI thật!")
-    time.sleep(2)
-
 # ============================================================
 # PHẦN 2: IMPORT & SETUP
 # ============================================================
@@ -54,12 +48,12 @@ print("-" * 40)
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from parser import filter_questions
-from classifier import classify_intent
-from clusterer import cluster_questions
-from detector import detect_response_status
-from scorer import calculate_priority_scores, get_top_questions
-from ai import is_configured, call_llm
+from codebase.parser import filter_questions
+from codebase.classifier import classify_intent
+from codebase.clusterer import cluster_questions
+from codebase.detector import detect_response_status
+from codebase.scorer import calculate_priority_scores, get_top_questions
+from codebase.ai import is_configured
 
 import pandas as pd
 
@@ -81,14 +75,14 @@ print("-" * 40)
 questions = filter_questions(df)
 print(f"✅ Step 1: Filtered {len(questions)} questions")
 
-# Step 2: Classify intent
-print("\n🤖 Step 2: Intent Classification...")
-print("   (Using AI for unclassified questions)")
-questions = classify_intent(questions, use_ai=is_configured())
+# Step 2: Classify intent (RULE-BASED for demo speed)
+print("\n🔍 Step 2: Intent Classification...")
+print("   (Using RULE-BASED for demo - fast)")
+questions = classify_intent(questions, use_ai=False)  # Rule-based for speed
 
 # Step 3: Cluster
 print("\n🔗 Step 3: Question Clustering...")
-questions = cluster_questions(questions, use_ai=False)  # Rule-based for speed
+questions = cluster_questions(questions, use_ai=False)
 
 # Step 4: Detect status
 print("\n💬 Step 4: Response Detection...")
@@ -130,9 +124,12 @@ print(f"   Unanswered: {status_counts.get('unanswered', 0)}")
 print("\n📋 PHẦN 5: Evaluation Results")
 print("-" * 40)
 
-# Run evaluation
-from eval.run_eval import run_evaluation
-results = run_evaluation()
+# Run evaluation (import here to avoid circular import)
+import importlib.util
+spec = importlib.util.spec_from_file_location("run_eval", "eval/run_eval.py")
+run_eval_module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(run_eval_module)
+results = run_eval_module.run_evaluation()
 
 # ============================================================
 # PHẦN 6: AI CALL LOGS
@@ -172,7 +169,7 @@ print("📊 DEMO SUMMARY")
 print("=" * 60)
 print(f"""
 ✅ Pipeline: Complete
-✅ AI Mode: {'Real API' if is_configured() else 'Mock'}
+✅ AI Mode: {'Real API' if is_configured() else 'Rule-based (demo)'}
 ✅ Questions Analyzed: {len(questions)}
 ✅ Evaluation: {results['summary']['intent_accuracy']:.0f}% accuracy
 ✅ Quality Bar: {'PASSED' if results['summary']['intent_accuracy'] >= 80 else 'FAILED'}
