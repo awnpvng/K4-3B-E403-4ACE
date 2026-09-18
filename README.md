@@ -35,11 +35,12 @@ Discord Messages → Parse & Filter → Intent Classification → Clustering →
 
 ## Features
 
-### 3 Slash Commands
+### 4 Slash Commands
 
 - `/leaderboard` - Xem BXH câu hỏi ưu tiên
 - `/unanswered` - Câu hỏi chưa trả lời sau 4 giờ
 - `/trend` - Chủ đề đang hot
+- `/stats` - Xem thống kê pipeline và trạng thái AI
 
 ## Evidence
 
@@ -52,8 +53,8 @@ Discord Messages → Parse & Filter → Intent Classification → Clustering →
 
 | Metric | Result | Quality Bar |
 |--------|--------|-------------|
-| Intent Accuracy | 80% (20/25) | ≥80% ✅ |
-| Status Detection | 100% (mock) | ≥85% |
+| Intent Accuracy | 80% (24/30) | ≥80% ✅ |
+| Status Detection | 100% (107/107) | ≥85% ✅ |
 
 ## Project Structure
 
@@ -68,7 +69,7 @@ codebase/
 └── output.py       # Step 7: Output Formatting
 
 eval/
-├── golden_set.md   # 25 test cases
+├── golden_set.md   # 30 test cases
 ├── run_eval.py     # Evaluation script
 └── eval_results.json
 
@@ -82,13 +83,17 @@ evidence/
 # Install dependencies
 pip install pandas numpy
 
-# Run pipeline
-cd codebase
-python main.py
+# Run the end-to-end demo from the repository root
+python demo.py
 
 # Run evaluation
 python eval/run_eval.py
 ```
+
+The demo and evaluator use the Discord CSV at
+`data/discord-pack/k4_messages.csv`. This data pack is not included in the
+current public repository snapshot; restore it locally before running the
+pipeline.
 
 ## Quality Bar
 
