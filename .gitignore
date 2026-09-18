@@ -32,6 +32,7 @@ data/
 *.json
 
 # Output
+logs/
 output/
 *.log
 
