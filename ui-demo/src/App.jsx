@@ -76,11 +76,13 @@ const normalizeQuestion = (row) => {
   const repeats = Number(row.cluster_size || 1);
   const ageHours = Number(row.age_hours || 0);
   const replierRole = row.replier_role || (status === 'answered' ? 'TA/BTC/labcoach' : null);
+  const answerText = row.answered || '';
 
   return {
     id: msgId,
     intent,
     status,
+    answered: answerText,
     question: questionText,
     priority,
     repeats,
@@ -314,6 +316,7 @@ function App() {
     item.intent,
     item.status,
     item.question.length > 60 ? `${item.question.slice(0, 60)}...` : item.question,
+    item.answered || '—',
   ]);
 
   const unansweredRows = unansweredQuestions.map((item) => [
@@ -347,7 +350,7 @@ function App() {
     if (command === '/leaderboard') {
       reply.type = 'table';
       reply.title = 'Leaderboard';
-      reply.columns = ['Rank', 'Priority', 'Intent', 'Status', 'Question'];
+      reply.columns = ['Rank', 'Priority', 'Intent', 'Status', 'Question', 'Answered'];
       reply.rows = leaderboardRows;
       setActiveView('bot-commands');
     } else if (command === '/unanswered') {
@@ -608,7 +611,7 @@ function App() {
               Run /leaderboard
             </button>
           </div>
-          <DataFrameTable columns={['Rank', 'Priority', 'Intent', 'Status', 'Question']} rows={leaderboardRows} />
+          <DataFrameTable columns={['Rank', 'Priority', 'Intent', 'Status', 'Question', 'Answered']} rows={leaderboardRows} />
         </section>
       );
     }
