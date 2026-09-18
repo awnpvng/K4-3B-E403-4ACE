@@ -75,6 +75,7 @@ const normalizeQuestion = (row) => {
   const priority = Number(row.priority_score || 0);
   const repeats = Number(row.cluster_size || 1);
   const ageHours = Number(row.age_hours || 0);
+  const replierRole = row.replier_role || (status === 'answered' ? 'TA/BTC/labcoach' : null);
 
   return {
     id: msgId,
@@ -87,6 +88,7 @@ const normalizeQuestion = (row) => {
     postedAt: row.created_at_vn || new Date().toISOString(),
     link: `https://discord.com/msg/${msgId}`,
     ageHours,
+    replierRole,
     representative: row.representative || questionText,
     reason: status === 'unanswered'
       ? 'Question still requires a human answer and has not been resolved in the recent thread.'
@@ -109,6 +111,8 @@ const navItems = [
   { label: '# ta-ops', value: 'ta-ops', icon: LayoutDashboard },
   { label: '# qna-alerts', value: 'qna-alerts', icon: CircleAlert },
   { label: '# bot-commands', value: 'bot-commands', icon: Sparkles },
+  { label: '# answered', value: 'answered', icon: Check },
+  { label: '# unanswered', value: 'unanswered', icon: CircleAlert },
 ];
 
 const commandHelp = [
@@ -533,9 +537,59 @@ function App() {
     </div>
   );
 
+  const answeredQuestions = useMemo(
+    () =>
+      rawQuestions
+        .filter((item) => item.status === 'answered')
+        .sort((a, b) => b.priority - a.priority)
+        .slice(0, 10),
+    []
+  );
+
   const renderBody = () => {
     if (activeView === 'general' || activeView === 'ta-ops' || activeView === 'qna-alerts' || activeView === 'bot-commands') {
       return renderDiscordView();
+    }
+
+    if (activeView === 'answered') {
+      return (
+        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-soft">
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Check className="h-5 w-5 text-emerald-600" />
+              <h2 className="text-lg font-semibold text-slate-900">Câu hỏi đã được trả lời bởi TA/BTC</h2>
+            </div>
+            <span className="rounded-full bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-700">
+              {answeredQuestions.length} câu hỏi
+            </span>
+          </div>
+
+          <div className="space-y-4">
+            {answeredQuestions.map((item) => (
+              <div key={item.id} className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+                <div className="mb-2 flex items-center justify-between">
+                  <span className={`rounded-full px-2 py-1 text-xs font-medium ${intentClasses[item.intent] || intentClasses.default}`}>
+                    {item.intent}
+                  </span>
+                  <span className="text-sm text-slate-500">Priority: {item.priority.toFixed(1)}</span>
+                </div>
+                <div className="mb-2 text-sm font-medium text-slate-700">
+                  ❓ Câu hỏi: {item.question}
+                </div>
+                <div className="rounded-lg bg-white p-3 text-sm text-slate-600">
+                  ✅ Đã có câu trả lời từ: {item.replierRole || 'TA/BTC/labcoach'}
+                </div>
+                <div className="mt-2 flex items-center justify-between text-xs text-slate-400">
+                  <span>ID: {item.id}</span>
+                  <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">
+                    Xem trên Discord →
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
     }
 
     if (activeView === 'leaderboard') {
