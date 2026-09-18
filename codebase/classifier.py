@@ -132,7 +132,10 @@ def llm_classify(questions: pd.DataFrame) -> pd.DataFrame:
     """
     Dùng LLM (Qwen) để phân loại câu hỏi không khớp keyword.
     """
-    from ai import ai_classify_intent, is_configured
+    import os
+    import sys
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from codebase.ai import ai_classify_intent, is_configured
 
     if not is_configured():
         print("   ⚠️ AI not configured, keeping 'other' classification")
