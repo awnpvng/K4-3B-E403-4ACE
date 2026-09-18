@@ -1,4 +1,4 @@
-# Environment
+# Environment - sensitive
 .env
 .env.local
 .env.*
@@ -26,15 +26,16 @@ wheels/
 .installed.cfg
 *.egg
 
-# Data
-data/
-*.csv
-*.json
+# Large data files (keep structure, ignore actual data)
+# data/            # UNCOMMENT nếu muốn ignore data
+data/README.md     # Giữ README của data
+data/discord-pack/k4_messages.csv   # KEEP cho evaluation
+data/discord-pack/k4_daily_reports.md  # KEEP cho evidence
 
-# Output
-logs/
-output/
-*.log
+# Output & Logs (KEEP cho CP3 submission)
+# output/          # UNCOMMENT nếu ignore output
+# logs/            # UNCOMMENT nếu ignore logs
+eval_results.json  # KEEP - evaluation results
 
 # IDE
 .vscode/
@@ -45,5 +46,5 @@ output/
 # macOS
 .DS_Store
 
-
+# Claude
 .claude
