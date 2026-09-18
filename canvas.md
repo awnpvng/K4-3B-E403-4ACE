@@ -6,6 +6,8 @@
 
 **Một TA/labcoach vào cuối ngày, trong server Discord chung, cần biết câu hỏi nào đang nóng và câu nào chưa được trả lời để chọn việc cần xử lý trước.**
 
+**Học viên muốn tra cứu các câu hỏi đã được trả lời để tự tìm thông tin khi cần.**
+
 ## Pain một câu
 
 **TA/labcoach đang rà lại nhiều tin nhắn Discord, nhưng không biết câu hỏi nào bị lặp hoặc còn tồn, nên mất thời gian tổng hợp và có thể bỏ sót câu hỏi cần trả lời sớm.**

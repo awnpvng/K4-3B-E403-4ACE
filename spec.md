@@ -9,7 +9,8 @@
 
 ### User và workflow
 
-- **Job executor:** Một TA/labcoach vào cuối ngày trong server Discord chung.
+- **Job executor (chính):** TA/labcoach vào cuối ngày trong server Discord để xử lý câu hỏi tồn đọng.
+- **Job executor (phụ):** Học viên muốn xem câu hỏi đã được trả lời để tự tra cứu thông tin.
 - **Workflow hiện tại:** Rà nhiều tin nhắn, tự nhận diện câu hỏi, tìm câu hỏi lặp, kiểm tra câu nào đã có phản hồi và chọn câu cần xử lý trước.
 - **Hậu quả:** Mất thời gian tổng hợp, có thể bỏ sót câu hỏi cần trả lời sớm và không có thứ hạng ưu tiên rõ ràng.
 
@@ -191,6 +192,8 @@ Phân tích 6 case intent chưa đạt: nhầm giữa `schedule` và `deadline_x
 
 **Kế hoạch validation:** giao một task xử lý 5-10 câu hỏi Discord bằng prototype, đo thời gian tìm câu cần xử lý, ghi nhận câu hỏi nào bị hiểu sai và lấy ít nhất một quote nguyên văn từ mỗi người.
 
+**Kết quả validation:** Đinh Lê Bình An góp ý `/leaderboard` cần hiển thị thêm câu trả lời đi kèm câu hỏi để ban tổ chức và học viên dễ tập trung xử lý; nhóm đã bổ sung cột `Answered`. Hồ Hoàng Phương Anh xem lại bản sửa và phản hồi “thấy ổn rồi”. Chi tiết: `validation/feedback_log.md`. Nhóm chưa đo thời gian hoàn thành task.
+
 **Feedback log thực tế:** hiện chưa có log dùng thử đầy đủ từ willing users ở mức định lượng; tuy nhiên, quy trình validation kế hoạch đã được xác định rõ và có thể triển khai ngay khi có dữ liệu thực nghiệm. Đây là bước tăng cường độ tin cậy trong giai đoạn mở rộng, không làm thay đổi core workflow của prototype hiện tại.
 
 ### Multi-prototype
@@ -205,5 +208,6 @@ Chưa thực hiện so sánh nhiều prototype. Bản hiện tại chọn pipeli
 | 18/09/2026 | Cho evaluator đọc trực tiếp `eval/golden_set.md` | Tránh kết quả 25 case lệch với golden set 30 case |
 | 18/09/2026 | Điều chỉnh classifier priority và keyword support | Giảm việc support lấn át GitHub/lab/schedule |
 | 18/09/2026 | Chạy lại pipeline/evaluator | Xác nhận 24/30 intent và 107/107 status |
+| 18/09/2026 | Bổ sung cột `Answered` trong `/leaderboard` | Đinh Lê Bình An góp ý cần thấy câu trả lời đi kèm câu hỏi; Hồ Hoàng Phương Anh xem lại và phản hồi “thấy ổn rồi” |
 | 18/09/2026 | Hoàn thiện phần nghiên cứu tương tự và ghi chú ràng buộc validation | Giảm độ mơ hồ của spec và nêu rõ điểm chưa đo được thực tế |
 

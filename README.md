@@ -4,18 +4,18 @@
 
 ## Team
 
-| Phần việc | Người phụ trách |
-|---|---|
-| Mining data và kiểm chứng evidence | Nguyễn Thị Minh Tiến |
-| Thiết kế flow/mock prototype | Phan Thị Khánh Linh |
-| Prompt, logic nhóm và xếp hạng | Trương Hoàng Thành An |
-| Golden set, test và demo | Phạm Anh Minh |
+| Phần việc                           | Người phụ trách       |
+| ------------------------------------- | ------------------------- |
+| Mining data và kiểm chứng evidence | Nguyễn Thị Minh Tiến   |
+| Thiết kế flow/mock prototype        | Phan Thị Khánh Linh     |
+| Prompt, logic nhóm và xếp hạng    | Trương Hoàng Thành An |
+| Golden set, test và demo             | Phạm Anh Minh            |
 
 ## Problem Statement
 
-**Pain:** TA/labcoach mất thời gian rà lại Discord, không biết câu hỏi nào đang hot hay còn tồn.
+**Pain:** TA/labcoach mất thời gian rà lại Discord, không biết câu hỏi nào đang hot hay còn tồn. Học viên cũng khó tra cứu câu hỏi đã được trả lời.
 
-**Lát cắt:** Một TA cuối ngày muốn xử lý câu hỏi tồn trong Discord; AI nhóm các câu hỏi tương tự, xếp hạng mức độ ưu tiên và chỉ ra câu chưa được trả lời sau 4 giờ.
+**Lát cắt:** Một TA cuối ngày muốn xử lý câu hỏi tồn trong Discord; AI nhóm các câu hỏi tương tự, xếp hạng mức độ ưu tiên và chỉ ra câu chưa được trả lời sau 4 giờ. Học viên có thể xem câu hỏi đã được trả lời để tự tra cứu.
 
 ## Pipeline Architecture
 
@@ -23,15 +23,15 @@
 Discord Messages → Parse & Filter → Intent Classification → Clustering → Response Detection → Scoring → Output
 ```
 
-| Step | Component | Type |
-|------|-----------|------|
-| 1 | Input (Discord messages) | ⚙️ Rule |
-| 2 | Parse & Filter | ⚙️ Rule |
-| 3 | Intent Classification | ✨ AI |
-| 4 | Question Clustering | ✨ AI |
-| 5 | Response Detection | ⚙️ Rule |
-| 6 | Scoring & Ranking | ✨ AI |
-| 7 | Output (Leaderboard) | ⚙️ Rule |
+| Step | Component                | Type      |
+| ---- | ------------------------ | --------- |
+| 1    | Input (Discord messages) | ⚙️ Rule |
+| 2    | Parse & Filter           | ⚙️ Rule |
+| 3    | Intent Classification    | ✨ AI     |
+| 4    | Question Clustering      | ✨ AI     |
+| 5    | Response Detection       | ⚙️ Rule |
+| 6    | Scoring & Ranking        | ✨ AI     |
+| 7    | Output (Leaderboard)     | ⚙️ Rule |
 
 ## Features
 
@@ -51,10 +51,17 @@ Discord Messages → Parse & Filter → Intent Classification → Clustering →
 
 ## Evaluation Results
 
+<<<<<<< HEAD
 | Metric | Result | Quality Bar |
 |--------|--------|-------------|
 | Intent Accuracy | 80% (24/30) | ≥80% ✅ |
 | Status Detection | 100% (107/107) | ≥85% ✅ |
+=======
+| Metric           | Result      | Quality Bar |
+| ---------------- | ----------- | ----------- |
+| Intent Accuracy  | 80% (24/25) | ≥80% ✅    |
+| Status Detection | 100% (mock) | ≥85%       |
+>>>>>>> 2ee61565bf31b9a7414061eab842c9b1b37a9499
 
 ## Project Structure
 
