@@ -130,14 +130,25 @@ def classify_intent(questions: pd.DataFrame, use_ai: bool = True) -> pd.DataFram
 
 def llm_classify(questions: pd.DataFrame) -> pd.DataFrame:
     """
-    Dùng LLM để phân loại câu hỏi không khớp keyword.
-
-    MOCK IMPLEMENTATION - Thay bằng API call thật khi deploy
+    Dùng LLM (Qwen) để phân loại câu hỏi không khớp keyword.
     """
-    # TODO: Replace with actual LLM API call
-    # Ví dụ: Gemini API, OpenAI API
+    from ai import ai_classify_intent, is_configured
 
-    # MOCK: Giữ nguyên là 'other' - sẽ dùng LLM thật sau
+    if not is_configured():
+        print("   ⚠️ AI not configured, keeping 'other' classification")
+        return questions
+
+    other = questions[questions['intent'] == 'other']
+
+    for idx, row in other.iterrows():
+        question = row['content']
+        result = ai_classify_intent(question)
+
+        questions.at[idx, 'intent'] = result['intent']
+        questions.at[idx, 'intent_confidence'] = result['confidence']
+
+        print(f"   [AI] Classified: {question[:50]}... → {result['intent']}")
+
     return questions
 
 def get_intent_summary(questions: pd.DataFrame) -> Dict:
