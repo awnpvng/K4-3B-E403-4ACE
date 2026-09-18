@@ -85,10 +85,13 @@ async def leaderboard(interaction: discord.Interaction):
     else:
         for i, (_, row) in enumerate(top.iterrows(), 1):
             question = str(row['content'])[:60] + "..." if len(str(row['content'])) > 60 else str(row['content'])
+            answer = str(row.get('answered', '') or 'Không có nội dung phản hồi')
+            if len(answer) > 200:
+                answer = answer[:200] + "..."
 
             embed.add_field(
                 name=f"#{i} [{str(row['intent']).replace('_', ' ').title()}]",
-                value=f"```{question}```\n⏱️ Score: {row['priority_score']:.1f}",
+                value=f"**Question:**\n```{question}```\n**Answered:**\n```{answer}```\n⏱️ Score: {row['priority_score']:.1f}",
                 inline=False
             )
 

@@ -18,9 +18,9 @@ def format_leaderboard(questions: pd.DataFrame) -> str:
 
     ## Top 10 câu hỏi cần xử lý
 
-    | # | Priority | Intent | Câu hỏi | Status |
-    |---|----------|--------|---------|--------|
-    | 1 | 8.5 | deadline_xp | "Deadline nộp lab..." | ⚠️ Unanswered |
+    | # | Priority | Intent | Câu hỏi | Status | Answered |
+    |---|----------|--------|---------|--------|----------|
+    | 1 | 8.5 | deadline_xp | "Deadline nộp lab..." | ⚠️ Unanswered | — |
     """
     output = ["# 📊 Leaderboard - Câu hỏi ưu tiên\n"]
     output.append("## Top câu hỏi cần xử lý\n")
@@ -30,8 +30,8 @@ def format_leaderboard(questions: pd.DataFrame) -> str:
         return '\n'.join(output)
 
     # Header
-    output.append("| # | Priority | Intent | Câu hỏi | Status | Link |")
-    output.append("|---|----------|--------|---------|--------|------|")
+    output.append("| # | Priority | Intent | Câu hỏi | Status | Answered | Link |")
+    output.append("|---|----------|--------|---------|--------|----------|------|")
 
     for i, (idx, row) in enumerate(questions.iterrows(), 1):
         # Truncate question
@@ -49,8 +49,11 @@ def format_leaderboard(questions: pd.DataFrame) -> str:
 
         # Link placeholder
         link = f"[→](https://discord.com/msg/{row['msg_id']})"
+        answer = str(row.get('answered', '') or '—')
+        if len(answer) > 100:
+            answer = answer[:100] + "..."
 
-        output.append(f"| {i} | {row.get('priority_score', 0):.1f} | {intent_label} | {question} | {status_icon} | {link} |")
+        output.append(f"| {i} | {row.get('priority_score', 0):.1f} | {intent_label} | {question} | {status_icon} | {answer} | {link} |")
 
     # Stats
     output.append("\n---\n")

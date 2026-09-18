@@ -20,6 +20,7 @@ def detect_response_status(questions: pd.DataFrame, all_messages: pd.DataFrame) 
     questions['status'] = 'unanswered'
     questions['replier_role'] = None
     questions['reply_time_hours'] = None
+    questions['answered'] = None
 
     # Parse time
     all_messages['created_at_vn'] = pd.to_datetime(all_messages['created_at_vn'])
@@ -38,6 +39,10 @@ def detect_response_status(questions: pd.DataFrame, all_messages: pd.DataFrame) 
 
         # Có reply - kiểm tra loại
         replier = replies.iloc[0]
+        answer = replier.get('content_clean')
+        if pd.isna(answer) or not str(answer).strip():
+            answer = replier.get('content', '')
+        questions.at[idx, 'answered'] = answer
 
         if replier['is_bot']:
             questions.at[idx, 'status'] = 'partial'
