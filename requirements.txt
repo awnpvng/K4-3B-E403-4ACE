@@ -7,3 +7,6 @@ numpy>=1.21.0
 
 # Optional: for .env file loading
 python-dotenv>=1.0.0
+
+# Discord bot (optional)
+discord.py>=2.0.0
