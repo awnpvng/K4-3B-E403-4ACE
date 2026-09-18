@@ -4,20 +4,17 @@
 
 | # | Priority | Intent | Câu hỏi | Status | Link |
 |---|----------|--------|---------|--------|------|
-| 1 | 12.1 | deadline xp | [@BOT] Điểm XP ngoài cày rank discord còn có tác dụng gì ? | ⚠️ Partial | [→](https://discord.com/msg/M91245) |
-| 2 | 9.0 | deadline xp | [@BOT] thời gian mở daily standup và kết thúc là khi nào vậy... | ⚠️ Partial | [→](https://discord.com/msg/M98666) |
-| 3 | 8.4 | deadline xp | [@BOT] 1, nếu giơ tay phát biểu mất bao lâu được duyệt cộng ... | ⚠️ Partial | [→](https://discord.com/msg/M54084) |
-| 4 | 8.1 | support | Mọi người cho em hỏi một chút ạ:
-Phần dataset là do BTC cung... | ✅ Answered | [→](https://discord.com/msg/M33335) |
-| 5 | 7.2 | deadline xp | [@BOT] Liệt kê toàn bộ công việc phải làm và cần làm trong 1... | ⚠️ Partial | [→](https://discord.com/msg/M47514) |
-| 6 | 7.1 | team | [@BOT] trong các buổi mentor-duty thì nhóm phải làm gì? | ⚠️ Partial | [→](https://discord.com/msg/M34860) |
-| 7 | 6.3 | support | Ý [HV] là sao nhỉ ? | ❌ Unanswered | [→](https://discord.com/msg/M66800) |
-| 8 | 6.1 | team | [@BOT] sau khi chốt nhóm muốn đổi tên nhóm thì cần làm những... | ⚠️ Partial | [→](https://discord.com/msg/M48369) |
-| 9 | 5.7 | support | [@BOT]
-
-1. Thời điểm bắt đầu hoạt động daily standup và các ... | ⚠️ Partial | [→](https://discord.com/msg/M95485) |
-| 10 | 5.6 | support | [@BOT] mentor duty là gì? | ❌ Unanswered | [→](https://discord.com/msg/M02015) |
+| 1 | 3.2 | support | [@D7688]  cho mình hỏi một team mấy bạn? | ❌ Unanswered | [→](https://discord.com/msg/M99769) |
+| 2 | 3.2 | support | Cho em hỏi workshop ngày mai thời lượng diễn ra trong bao lâ... | ✅ Answered | [→](https://discord.com/msg/M57505) |
+| 3 | 2.4 | support | Các bạn có thể tìm cho mình những người đồng đội phụ hợp tro... | ✅ Answered | [→](https://discord.com/msg/M45489) |
+| 4 | 2.2 | support | T3 tuần sau lecture sáng em có việc muốn xin vào trễ 30p thì... | ✅ Answered | [→](https://discord.com/msg/M56857) |
+| 5 | 2.2 | support | Anh ơi cho e hỏi chút ạ. Vì buổi sáng học 13h mới tan, mà ch... | ✅ Answered | [→](https://discord.com/msg/M73605) |
+| 6 | 2.1 | support | cho mình hỏi một team bao nhiêu bạn ? | ✅ Answered | [→](https://discord.com/msg/M83358) |
+| 7 | 2.0 | support | A ơi, cho e hỏi, buổi workshop chủ nhật ngày mai thì có tính... | ✅ Answered | [→](https://discord.com/msg/M63574) |
+| 8 | 1.1 | team | theo em hiểu có deliverables bắt buộc là btc ra đề bài rồi c... | ✅ Answered | [→](https://discord.com/msg/M23596) |
+| 9 | 1.1 | support | Tại e thấy trong sổ tay phải có xác nhận của giám đốc, nên l... | ❌ Unanswered | [→](https://discord.com/msg/M30246) |
+| 10 | 1.1 | other | 2b vs 2a vẫn join chung được luôn ạ ? | ❌ Unanswered | [→](https://discord.com/msg/M67317) |
 
 ---
 
-_Generated: 2026-09-18 09:23_
+_Generated: 2026-09-18 10:36_
