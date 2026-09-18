@@ -100,7 +100,7 @@ print("✅ Pipeline complete!")
 print("\n📋 PHẦN 4: Results")
 print("-" * 40)
 
-# Top questions
+# Top questions ĐÃ ĐƯỢC TRẢ LỜI bởi TA/BTC/labcoach
 top = get_top_questions(questions, n=5)
 
 print("\n🏆 TOP 5 Priority Questions:")
