@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-09-18T11:44:36.005434",
+  "timestamp": "2026-09-18T14:54:39.843445",
   "summary": {
-    "total_intent_cases": 25,
+    "total_intent_cases": 30,
     "intent_accuracy": 80.0,
     "status_accuracy": 100.0,
-    "correct_intent": 20
+    "correct_intent": 24
   },
   "quality_bar": {
     "intent_accuracy": 80,
@@ -13,19 +13,19 @@
   "per_layer": {
     "2": {
       "correct": 1,
-      "total": 1
+      "total": 2
     },
     "4": {
       "correct": 11,
       "total": 12
     },
     "1": {
-      "correct": 6,
-      "total": 8
+      "correct": 9,
+      "total": 10
     },
     "3": {
-      "correct": 2,
-      "total": 4
+      "correct": 3,
+      "total": 6
     }
   },
   "intent_cases": [
@@ -65,8 +65,8 @@
       "id": "GS005",
       "input": "Mình không biết làm lab, ai giúp mình với?",
       "expected": "support",
-      "predicted": "support",
-      "correct": true,
+      "predicted": "lab_technical",
+      "correct": false,
       "layer": 3
     },
     {
@@ -88,9 +88,9 @@
     {
       "id": "GS008",
       "input": "Có ai biết thư viện trường ở đâu không?",
-      "expected": "schedule",
-      "predicted": "support",
-      "correct": false,
+      "expected": "other",
+      "predicted": "other",
+      "correct": true,
       "layer": 1
     },
     {
@@ -105,8 +105,8 @@
       "id": "GS010",
       "input": "Mình gửi mail cho ai để xin nghỉ buổi học?",
       "expected": "support",
-      "predicted": "support",
-      "correct": true,
+      "predicted": "schedule",
+      "correct": false,
       "layer": 1
     },
     {
@@ -161,13 +161,13 @@
       "id": "GS017",
       "input": "Có được nghỉ lab nếu đi làm thực tập không?",
       "expected": "schedule",
-      "predicted": "lab_technical",
-      "correct": false,
+      "predicted": "schedule",
+      "correct": true,
       "layer": 3
     },
     {
       "id": "GS018",
-      "input": "Link phoenix bị lỗi, vào không được",
+      "input": "Link phoenix bị lỗi, vào không được, phải làm sao?",
       "expected": "onboarding",
       "predicted": "onboarding",
       "correct": true,
@@ -185,8 +185,8 @@
       "id": "GS020",
       "input": "Clone repo rồi nhưng không biết branch nào là đúng",
       "expected": "github_phoenix",
-      "predicted": "support",
-      "correct": false,
+      "predicted": "github_phoenix",
+      "correct": true,
       "layer": 1
     },
     {
@@ -228,6 +228,46 @@
       "predicted": "schedule",
       "correct": true,
       "layer": 4
+    },
+    {
+      "id": "GS026",
+      "input": "Clone repo rồi nhưng không biết branch nào đúng, a",
+      "expected": "github_phoenix",
+      "predicted": "github_phoenix",
+      "correct": true,
+      "layer": 1
+    },
+    {
+      "id": "GS027",
+      "input": "Lab bị lỗi, ai hướng dẫn mình cách sửa với?",
+      "expected": "lab_technical",
+      "predicted": "lab_technical",
+      "correct": true,
+      "layer": 1
+    },
+    {
+      "id": "GS028",
+      "input": "Cho mình hỏi căn tin trường đóng cửa lúc mấy giờ?",
+      "expected": "other",
+      "predicted": "other",
+      "correct": true,
+      "layer": 3
+    },
+    {
+      "id": "GS029",
+      "input": "Bot đã gửi hướng dẫn nhưng mình vẫn chưa hiểu bước",
+      "expected": "support",
+      "predicted": "lab_technical",
+      "correct": false,
+      "layer": 3
+    },
+    {
+      "id": "GS030",
+      "input": "Có bạn trả lời là phải nộp trước 21:00, vậy đã chố",
+      "expected": "deadline_xp",
+      "predicted": "other",
+      "correct": false,
+      "layer": 2
     }
   ],
   "status_summary": {

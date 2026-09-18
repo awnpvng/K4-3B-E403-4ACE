@@ -12,13 +12,13 @@ import os
 
 # Intent với priority (số càng nhỏ = ưu tiên càng cao)
 INTENT_PRIORITY = {
-    'support': 1,           # Hỗ trợ chung - catch-all cuối cùng
-    'deadline_xp': 2,       # Deadline/XP - cụ thể nhất
-    'team': 3,
-    'schedule': 4,
-    'github_phoenix': 5,
-    'onboarding': 6,
-    'lab_technical': 7,     # Lab Technical - bị các intent khác override
+    'deadline_xp': 1,       # Deadline/XP - cụ thể nhất
+    'team': 2,
+    'schedule': 3,
+    'github_phoenix': 4,
+    'onboarding': 5,
+    'lab_technical': 6,
+    'support': 7,           # Hỗ trợ chung - catch-all cuối cùng
     'other': 8
 }
 
@@ -52,7 +52,7 @@ INTENT_PATTERNS = {
         'keywords': [
             r'workshop', r'buổi học', r'buổi workshop', r'thứ\s*\d',
             r'bắt buộc', r'chủ nhật', r'ngày mai', r'thời gian', r'học trực tuyến',
-            r'zoom', r'outlook', r'lịch học', r'tham gia', r'vắng', r'sáng\b.*học',
+            r'zoom', r'outlook', r'lịch học', r'tham gia', r'vắng', r'nghỉ', r'sáng\b.*học',
             r'học\s*sáng', r'buổi\b'
         ],
         'description': 'Câu hỏi về lịch, workshop, thời gian'
@@ -75,10 +75,8 @@ INTENT_PATTERNS = {
     },
     'support': {
         'keywords': [
-            r'hỏi\b', r'hỗ trợ', r'giúp', r'cho mình', r'cho e',
-            r'thắc mắc', r'xin hỏi', r'giải đáp', r'chỉ mình', r'hướng dẫn',
-            r'tư vấn', r'xin\b', r'liên hệ', r'gửi mail', r'ai giúp',
-            r'bạn nào', r'người nào', r'thư viện', r'biết\b'
+            r'hỗ trợ', r'giúp', r'thắc mắc', r'giải đáp', r'tư vấn',
+            r'xin\b', r'liên hệ', r'gửi mail', r'ai giúp', r'bạn nào', r'người nào'
         ],
         'description': 'Câu hỏi hỗ trợ chung'
     }
