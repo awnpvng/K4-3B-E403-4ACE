@@ -80,11 +80,11 @@ Mỗi case có:
   {
     "id": "GS008",
     "input": "Có ai biết thư viện trường ở đâu không?",
-    "expected_intent": "schedule",
+    "expected_intent": "other",
     "expected_cluster_size": 1,
     "expected_status": "answered",
     "layer": 1,
-    "notes": "Câu hỏi đời thường, không liên quan đến khóa học"
+    "notes": "Câu hỏi đời thường, không liên quan đến khóa học - cần phân loại other"
   },
   {
     "id": "GS009",
@@ -169,7 +169,7 @@ Mỗi case có:
   },
   {
     "id": "GS018",
-    "input": "Link phoenix bị lỗi, vào không được",
+    "input": "Link phoenix bị lỗi, vào không được, phải làm sao?",
     "expected_intent": "onboarding",
     "expected_cluster_size": 1,
     "expected_status": "answered",
@@ -238,6 +238,51 @@ Mỗi case có:
     "expected_status": "unanswered",
     "layer": 4,
     "notes": "Cần căn cứ vào kênh chính thức của khóa"
+  },
+  {
+    "id": "GS026",
+    "input": "Clone repo rồi nhưng không biết branch nào đúng, ai chỉ mình với?",
+    "expected_intent": "github_phoenix",
+    "expected_cluster_size": 1,
+    "expected_status": "unanswered",
+    "layer": 1,
+    "notes": "Tín hiệu GitHub phải được ưu tiên hơn từ khóa hỗ trợ chung 'chỉ mình'"
+  },
+  {
+    "id": "GS027",
+    "input": "Lab bị lỗi, ai hướng dẫn mình cách sửa với?",
+    "expected_intent": "lab_technical",
+    "expected_cluster_size": 1,
+    "expected_status": "unanswered",
+    "layer": 1,
+    "notes": "Câu hỏi kỹ thuật có từ khóa hỗ trợ, nhưng intent chính là lab_technical"
+  },
+  {
+    "id": "GS028",
+    "input": "Cho mình hỏi căn tin trường đóng cửa lúc mấy giờ?",
+    "expected_intent": "other",
+    "expected_cluster_size": 1,
+    "expected_status": "answered",
+    "layer": 3,
+    "notes": "Câu hỏi ngoài phạm vi khóa học, không nên ép vào schedule"
+  },
+  {
+    "id": "GS029",
+    "input": "Bot đã gửi hướng dẫn nhưng mình vẫn chưa hiểu bước này, ai giải thích thêm giúp mình với?",
+    "expected_intent": "support",
+    "expected_cluster_size": 1,
+    "expected_status": "partial",
+    "layer": 3,
+    "notes": "Có bot reply nhưng chưa chứng minh câu hỏi đã được giải quyết hoàn toàn"
+  },
+  {
+    "id": "GS030",
+    "input": "Có bạn trả lời là phải nộp trước 21:00, vậy đã chốt chưa ạ?",
+    "expected_intent": "deadline_xp",
+    "expected_cluster_size": 1,
+    "expected_status": "answered",
+    "layer": 2,
+    "notes": "Có reply của user nhưng nội dung còn cần xác nhận; dùng làm case kiểm tra status semantics"
   }
 ]
 ```
