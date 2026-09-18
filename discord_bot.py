@@ -68,29 +68,31 @@ async def on_ready():
     print(f"AI configured: {is_configured()}")
     print("Commands: /leaderboard, /unanswered, /trend, /stats")
 
-@tree.command(name="leaderboard", description="Xem bảng xếp hạng câu hỏi ưu tiên")
+@tree.command(name="leaderboard", description="Câu hỏi đã được trả lời bởi TA/BTC/labcoach")
 async def leaderboard(interaction: discord.Interaction):
     await interaction.response.defer()
 
+    # ĐÃ ĐƯỢC TRẢ LỜI bởi TA/BTC/labcoach
     top = get_top_questions(questions, n=10)
 
     embed = discord.Embed(
-        title="📊 Leaderboard - Câu hỏi ưu tiên",
-        color=discord.Color.blue()
+        title="✅ Leaderboard - Câu hỏi đã được trả lời",
+        color=discord.Color.green()
     )
 
-    for i, (_, row) in enumerate(top.iterrows(), 1):
-        status_emoji = {"unanswered": "❌", "partial": "⚠️", "answered": "✅"}.get(row['status'], "❓")
+    if len(top) == 0:
+        embed.description = "⚠️ Không có câu hỏi nào được trả lời!"
+    else:
+        for i, (_, row) in enumerate(top.iterrows(), 1):
+            question = str(row['content'])[:60] + "..." if len(str(row['content'])) > 60 else str(row['content'])
 
-        question = row['content'][:60] + "..." if len(str(row['content'])) > 60 else row['content']
+            embed.add_field(
+                name=f"#{i} [{str(row['intent']).replace('_', ' ').title()}]",
+                value=f"```{question}```\n⏱️ Score: {row['priority_score']:.1f}",
+                inline=False
+            )
 
-        embed.add_field(
-            name=f"#{i} {status_emoji} {str(row['intent']).replace('_', ' ').title()}",
-            value=f"```{question}```\n⏱️ Score: {row['priority_score']:.1f}",
-            inline=False
-        )
-
-    embed.set_footer(text=f"Total: {len(questions)} questions | AI: {'On' if is_configured() else 'Off'}")
+    embed.set_footer(text=f"Total: {len(top)} câu đã trả lời")
 
     await interaction.followup.send(embed=embed)
 

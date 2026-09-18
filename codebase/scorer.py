@@ -67,8 +67,12 @@ def calculate_priority_scores(questions: pd.DataFrame) -> pd.DataFrame:
     return questions
 
 def get_top_questions(questions: pd.DataFrame, n: int = 10) -> pd.DataFrame:
-    """Lấy top N câu hỏi ưu tiên cao nhất"""
-    return questions.nlargest(n, 'priority_score')
+    """
+    Lấy top N câu hỏi ĐÃ ĐƯỢC TRẢ LỜI bởi TA/BTC/labcoach.
+    """
+    # Chỉ lấy đã trả lời (TA/BTC/labcoach)
+    answered = questions[questions['status'] == 'answered']
+    return answered.nlargest(n, 'priority_score')
 
 def get_unanswered_urgent(questions: pd.DataFrame, hours_threshold: int = 4) -> pd.DataFrame:
     """Lấy câu hỏi chưa trả lời sau N giờ"""
