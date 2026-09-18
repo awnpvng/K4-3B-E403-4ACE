@@ -57,6 +57,60 @@
    - Nếu kịp, cho thấy một case khó: câu hỏi lặp, đã được trả lời hoặc tin bot.
    - Video phải thể hiện AI trả kết quả thật, không chỉ là mock UI.
 
+### Hướng dẫn cụ thể cho Frontend team
+
+#### Phần 1 - Hoàn thiện prototype end-to-end
+
+Frontend cần làm một màn hình TA có thể đi hết luồng sau:
+
+1. Chọn hoặc nạp dữ liệu tin nhắn Discord.
+2. Bấm nút chạy phân tích.
+3. Hiển thị trạng thái đang xử lý/loading.
+4. Hiển thị danh sách nhóm câu hỏi, trong đó mỗi nhóm có:
+	- Câu hỏi đại diện.
+	- Số lần câu hỏi bị lặp.
+	- Chủ đề/intent.
+	- Mức ưu tiên hoặc điểm ưu tiên.
+	- Trạng thái: `unanswered`, `partial` hoặc `answered`.
+	- Mã tin nhắn hoặc link để TA mở và xử lý.
+5. Có khu vực riêng cho câu hỏi chưa được trả lời sau 4 giờ.
+6. Có trạng thái `không chắc chắn`/`cần TA kiểm tra` khi AI thiếu căn cứ; không hiển thị kết quả như một sự thật chắc chắn.
+
+Frontend không cần làm chức năng gửi trả lời tự động. Kết quả cuối cùng chỉ là danh sách gợi ý để TA quyết định.
+
+**Tiêu chí kiểm tra phần 1:** từ lúc nạp dữ liệu đến lúc thấy danh sách ưu tiên phải chạy được liên tục, không cần sửa tay dữ liệu giữa chừng. Có thể dùng mock data cho phần input hoặc một số trường phụ, nhưng phải ghi rõ phần mock; kết quả nhóm/ưu tiên chính phải nhận từ pipeline.
+
+#### Phần 2 - Hiển thị và chứng minh AI chạy thật
+
+Frontend phối hợp với backend/pipeline để chứng minh AI được gọi ở quyết định trung tâm:
+
+1. Dùng kết quả từ pipeline có `use_ai=True`, không chỉ dùng dữ liệu hardcode trong giao diện.
+2. Gắn kết quả AI vào ít nhất một phần chính của màn hình:
+	- intent của câu hỏi;
+	- nhóm các câu hỏi cùng ý nghĩa;
+	- tóm tắt nhóm; hoặc
+	- lý do/mức ưu tiên.
+3. Hiển thị rõ trạng thái xử lý AI:
+	- Đang phân tích.
+	- Đã phân tích.
+	- Không gọi được AI hoặc thiếu căn cứ.
+4. Khi AI không có kết quả, giao diện phải hiển thị fallback rõ ràng, ví dụ `Chưa đủ căn cứ - cần TA kiểm tra`, không tự bịa dữ liệu.
+5. Backend lưu log tại `logs/ai_calls.jsonl`; cần có ít nhất một entry với `status: success` để chứng minh API call thật.
+
+**Tiêu chí kiểm tra phần 2:** kết quả trên màn hình thay đổi theo input và có thể đối chiếu với log AI. Không được chỉ đổi nhãn `AI On` trong giao diện trong khi toàn bộ kết quả vẫn hardcode hoặc rule-based.
+
+#### Checklist FE trước khi bàn giao
+
+- [ ] Có màn hình nạp/chọn dữ liệu và nút chạy phân tích.
+- [ ] Có loading, success và error/fallback state.
+- [ ] Có danh sách nhóm câu hỏi với số lần lặp, intent, priority và status.
+- [ ] Có khu vực câu hỏi chưa trả lời sau 4 giờ.
+- [ ] Có mã/link tin nhắn cho TA kiểm tra.
+- [ ] Có trạng thái `không chắc chắn`/`cần TA kiểm tra`.
+- [ ] Không có nút tự động gửi câu trả lời cho học viên.
+- [ ] Demo được một case bình thường và một case khó.
+- [ ] Kết quả lấy từ pipeline, không hardcode toàn bộ.
+
 ### Sản phẩm phải có sau CP3
 
 - Video thao tác 30 giây.
