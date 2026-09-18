@@ -8,13 +8,21 @@
 - **Giới hạn:** AI chỉ gợi ý và xếp hạng; không tự gửi tin nhắn, không nêu danh tính học viên và không quyết định thay TA.
 - **CP1/CP2 (đã hoàn thành):** Canvas đã có trong `canvas.md`; luồng chính đã được xác định ở CP2. Từ đây tập trung vào AI chạy thật, đo lường và chốt spec.
 
+<<<<<<< HEAD
 ## CP3 - Video thao tác và số đo **(đã hoàn thành)**
+=======
+## CP3 - Video thao tác và số đo
+>>>>>>> origin/main
 
 **Hạn nộp:** 16:00 ngày 18/09/2026.
 
 ### Việc cần làm
 
+<<<<<<< HEAD
 1. **Hoàn thiện prototype theo một luồng end-to-end  `(đã hoàn thành)`**
+=======
+1. **Hoàn thiện prototype theo một luồng end-to-end**
+>>>>>>> origin/main
 
    - Nhập/chọn các tin nhắn Discord.
    - AI nhóm các câu hỏi tương tự.
@@ -22,7 +30,11 @@
    - Phát hiện câu chưa có phản hồi sau 4 giờ.
    - Hiển thị link tin nhắn để TA mở và tự trả lời.
    - Có trạng thái không chắc chắn hoặc không đủ căn cứ để không đoán bừa.
+<<<<<<< HEAD
 2. **Tích hợp ít nhất một lời gọi AI thật (đã hoàn thành)**
+=======
+2. **Tích hợp ít nhất một lời gọi AI thật**
+>>>>>>> origin/main
 
    - Lời gọi AI phải nằm ở quyết định trung tâm: phân nhóm câu hỏi, tóm tắt hoặc xếp hạng ưu tiên.
    - Không hardcode toàn bộ kết quả demo.
