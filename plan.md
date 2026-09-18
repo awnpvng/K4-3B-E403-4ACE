@@ -4,25 +4,18 @@
 
 - **Track:** B2 - Tính năng mới cho TA/học viên trong Discord.
 - **Người dùng chính:** TA/labcoach vào cuối ngày.
-- **Lát cắt:** AI nhóm các câu hỏi tương tự, đếm số lần lặp, xếp hạng ưu tiên và chỉ ra câu hỏi chưa được trả lời sau 4 giờ; TA nhận danh sách ưu tiên kèm link tin nhắn để xử lý.
+- **Người dùng phụ:** Học viên muốn tra cứu câu hỏi đã được trả lời.
+- **Lát cắt:** AI nhóm các câu hỏi tương tự, đếm số lần lặp, xếp hạng ưu tiên và chỉ ra câu hỏi chưa được trả lời sau 4 giờ; TA nhận danh sách ưu tiên kèm link tin nhắn để xử lý. Học viên có thể xem câu đã trả lời để tự tra cứu.
 - **Giới hạn:** AI chỉ gợi ý và xếp hạng; không tự gửi tin nhắn, không nêu danh tính học viên và không quyết định thay TA.
 - **CP1/CP2 (đã hoàn thành):** Canvas đã có trong `canvas.md`; luồng chính đã được xác định ở CP2. Từ đây tập trung vào AI chạy thật, đo lường và chốt spec.
 
-<<<<<<< HEAD
 ## CP3 - Video thao tác và số đo **(đã hoàn thành)**
-=======
-## CP3 - Video thao tác và số đo
->>>>>>> origin/main
 
 **Hạn nộp:** 16:00 ngày 18/09/2026.
 
 ### Việc cần làm
 
-<<<<<<< HEAD
 1. **Hoàn thiện prototype theo một luồng end-to-end  `(đã hoàn thành)`**
-=======
-1. **Hoàn thiện prototype theo một luồng end-to-end**
->>>>>>> origin/main
 
    - Nhập/chọn các tin nhắn Discord.
    - AI nhóm các câu hỏi tương tự.

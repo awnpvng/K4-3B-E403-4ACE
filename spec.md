@@ -9,7 +9,8 @@
 
 ### User và workflow
 
-- **Job executor:** Một TA/labcoach vào cuối ngày trong server Discord chung.
+- **Job executor (chính):** TA/labcoach vào cuối ngày trong server Discord để xử lý câu hỏi tồn đọng.
+- **Job executor (phụ):** Học viên muốn xem câu hỏi đã được trả lời để tự tra cứu thông tin.
 - **Workflow hiện tại:** Rà nhiều tin nhắn, tự nhận diện câu hỏi, tìm câu hỏi lặp, kiểm tra câu nào đã có phản hồi và chọn câu cần xử lý trước.
 - **Hậu quả:** Mất thời gian tổng hợp, có thể bỏ sót câu hỏi cần trả lời sớm và không có thứ hạng ưu tiên rõ ràng.
 

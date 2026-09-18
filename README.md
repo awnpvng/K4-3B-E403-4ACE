@@ -13,9 +13,9 @@
 
 ## Problem Statement
 
-**Pain:** TA/labcoach mất thời gian rà lại Discord, không biết câu hỏi nào đang hot hay còn tồn.
+**Pain:** TA/labcoach mất thời gian rà lại Discord, không biết câu hỏi nào đang hot hay còn tồn. Học viên cũng khó tra cứu câu hỏi đã được trả lời.
 
-**Lát cắt:** Một TA cuối ngày muốn xử lý câu hỏi tồn trong Discord; AI nhóm các câu hỏi tương tự, xếp hạng mức độ ưu tiên và chỉ ra câu chưa được trả lời sau 4 giờ.
+**Lát cắt:** Một TA cuối ngày muốn xử lý câu hỏi tồn trong Discord; AI nhóm các câu hỏi tương tự, xếp hạng mức độ ưu tiên và chỉ ra câu chưa được trả lời sau 4 giờ. Học viên có thể xem câu hỏi đã được trả lời để tự tra cứu.
 
 ## Pipeline Architecture
 
