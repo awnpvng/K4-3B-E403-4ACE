@@ -6,14 +6,17 @@ Config:
 - OPENAI_API_KEY: API key (required)
 - OPENAI_BASE_URL: API endpoint
 - MODEL: Model name (default: qwen3.7-flash)
+
+Logs được lưu vào logs/ai_calls.jsonl
 """
 
 import os
 import json
 import ssl
+import datetime
 from typing import Dict, List, Optional
 
-
+# Load .env file if exists
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -30,15 +33,40 @@ SSL_CONTEXT = ssl.create_default_context()
 SSL_CONTEXT.check_hostname = False
 SSL_CONTEXT.verify_mode = ssl.CERT_NONE
 
+# Logging setup
+LOGS_DIR = "logs"
+os.makedirs(LOGS_DIR, exist_ok=True)
+LOG_FILE = os.path.join(LOGS_DIR, "ai_calls.jsonl")
+
 def is_configured() -> bool:
     """Kiểm tra đã configure API key chưa"""
     return bool(API_KEY)
 
-def call_llm(prompt: str, system: str = "") -> Optional[str]:
+def log_llm_call(call_data: Dict):
+    """Log LLM call vào file JSONL"""
+    with open(LOG_FILE, "a", encoding="utf-8") as f:
+        f.write(json.dumps(call_data, ensure_ascii=False) + "\n")
+
+def call_llm(prompt: str, system: str = "", function: str = "unknown") -> Optional[str]:
     """
     Gọi OpenAI-compatible API (Qwen).
+    Log đầy đủ request/response để prove AI chạy thật.
     """
+    timestamp = datetime.datetime.now().isoformat()
+
+    call_log = {
+        "timestamp": timestamp,
+        "function": function,
+        "model": MODEL,
+        "base_url": BASE_URL,
+        "prompt_length": len(prompt),
+        "system_length": len(system) if system else 0,
+    }
+
     if not API_KEY:
+        call_log["status"] = "error"
+        call_log["error"] = "API key not set"
+        log_llm_call(call_log)
         print("   ⚠️ OPENAI_API_KEY not set - using mock")
         return None
 
@@ -75,15 +103,34 @@ def call_llm(prompt: str, system: str = "") -> Optional[str]:
             result = json.loads(response.read().decode("utf-8"))
 
             if "choices" in result and len(result["choices"]) > 0:
-                return result["choices"][0]["message"]["content"]
+                response_content = result["choices"][0]["message"]["content"]
 
-            return None
+                # Log successful call
+                call_log["status"] = "success"
+                call_log["response"] = response_content
+                call_log["response_length"] = len(response_content)
+                log_llm_call(call_log)
+
+                return response_content
+
+        call_log["status"] = "error"
+        call_log["error"] = "No choices in response"
+        log_llm_call(call_log)
+        return None
 
     except urllib.error.HTTPError as e:
-        print(f"   ❌ HTTP error: {e.code} - {e.reason}")
+        error_msg = f"HTTP {e.code} - {e.reason}"
+        call_log["status"] = "error"
+        call_log["error"] = error_msg
+        log_llm_call(call_log)
+        print(f"   ❌ {error_msg}")
         return None
     except Exception as e:
-        print(f"   ❌ API error: {e}")
+        error_msg = str(e)
+        call_log["status"] = "error"
+        call_log["error"] = error_msg
+        log_llm_call(call_log)
+        print(f"   ❌ API error: {error_msg}")
         return None
 
 # ============================================================
@@ -132,7 +179,8 @@ def ai_classify_intent(question: str) -> Dict:
         return {"intent": "other", "confidence": 0.5}
 
     response = call_llm(
-        INTENT_CLASSIFY_PROMPT.format(question=question[:500])
+        INTENT_CLASSIFY_PROMPT.format(question=question[:500]),
+        function="classify_intent"
     )
 
     if response:
@@ -162,7 +210,8 @@ def ai_cluster_questions(questions: List[str]) -> Dict:
     questions_text = "\n".join([f"- {q[:100]}" for q in questions[:20]])
 
     response = call_llm(
-        SEMANTIC_CLUSTER_PROMPT.format(questions=questions_text)
+        SEMANTIC_CLUSTER_PROMPT.format(questions=questions_text),
+        function="cluster_questions"
     )
 
     if response:
@@ -187,7 +236,7 @@ def ai_generate_summary(questions: List[str], status: str) -> str:
 
 Trạng thái: {status}"""
 
-    response = call_llm(prompt)
+    response = call_llm(prompt, function="generate_summary")
     return response if response else f"{len(questions)} câu hỏi về chủ đề chính"
 
 # ============================================================
@@ -198,9 +247,14 @@ if __name__ == "__main__":
     print(f"API Key set: {bool(API_KEY)}")
     print(f"Base URL: {BASE_URL}")
     print(f"Model: {MODEL}")
+    print(f"Log file: {LOG_FILE}")
 
     if API_KEY:
         test = ai_classify_intent("Deadline nộp Lab2 là khi nào?")
         print(f"Test classification: {test}")
+
+        # Print log file location
+        if os.path.exists(LOG_FILE):
+            print(f"✅ Log saved to: {LOG_FILE}")
     else:
         print("No API key - skipping test")

@@ -4,6 +4,10 @@ CP3 - AI Thực Chiến
 
 Usage:
     python eval/run_eval.py
+
+Output:
+    - eval_results.json: Full evaluation results
+    - logs/ai_calls.jsonl: LLM call logs (for proof of real AI calls)
 """
 
 import sys
@@ -20,6 +24,7 @@ from classifier import classify_intent, INTENT_PATTERNS
 from clusterer import cluster_questions
 from detector import detect_response_status
 from scorer import calculate_priority_scores
+from ai import is_configured, call_llm
 
 # ============================================================
 # GOLDEN SET CASES
