@@ -1,71 +1,89 @@
 """
 AI Module - Real LLM calls
-Dùng Gemini API cho CP3
+Dùng OpenAI-compatible API (Qwen3.7-flash)
 
-API: Gemini 1.5 Flash (free tier)
+Config:
+- OPENAI_API_KEY: API key (required)
+- OPENAI_BASE_URL: API endpoint
+- MODEL: Model name (default: qwen3.7-flash)
 """
 
 import os
 import json
-import re
+import ssl
 from typing import Dict, List, Optional
 
-# Check for API key
-API_KEY = os.environ.get("GEMINI_API_KEY", "")
+
+from dotenv import load_dotenv
+load_dotenv()
+
+# Config từ environment
+API_KEY = os.environ.get("OPENAI_API_KEY", "")
+BASE_URL = os.environ.get(
+    "OPENAI_BASE_URL",
+    "https://ws-3yxiehnuth1rm9pt.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+)
+MODEL = os.environ.get("MODEL", "qwen3.7-flash")
+
+# SSL context cho internal APIs (không verify certificate)
+SSL_CONTEXT = ssl.create_default_context()
+SSL_CONTEXT.check_hostname = False
+SSL_CONTEXT.verify_mode = ssl.CERT_NONE
 
 def is_configured() -> bool:
     """Kiểm tra đã configure API key chưa"""
     return bool(API_KEY)
 
-def call_gemini(prompt: str, system: str = "") -> Optional[str]:
+def call_llm(prompt: str, system: str = "") -> Optional[str]:
     """
-    Gọi Gemini API.
-
-    Args:
-        prompt: User prompt
-        system: System prompt (optional)
-
-    Returns:
-        Response text hoặc None nếu lỗi
+    Gọi OpenAI-compatible API (Qwen).
     """
     if not API_KEY:
-        print("   ⚠️ GEMINI_API_KEY not set - using mock")
+        print("   ⚠️ OPENAI_API_KEY not set - using mock")
         return None
 
     try:
         import urllib.request
         import urllib.error
 
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}"
+        url = f"{BASE_URL}/chat/completions"
+
+        messages = []
+        if system:
+            messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt})
 
         payload = {
-            "contents": [{
-                "parts": [{"text": prompt}]
-            }]
+            "model": MODEL,
+            "messages": messages,
+            "temperature": 0.1
         }
-
-        if system:
-            payload["systemInstruction"] = {"parts": [{"text": system}]}
 
         data = json.dumps(payload).encode("utf-8")
 
         req = urllib.request.Request(
             url,
             data=data,
-            headers={"Content-Type": "application/json"},
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {API_KEY}"
+            },
             method="POST"
         )
 
-        with urllib.request.urlopen(req, timeout=30) as response:
+        with urllib.request.urlopen(req, timeout=60, context=SSL_CONTEXT) as response:
             result = json.loads(response.read().decode("utf-8"))
 
-            if "candidates" in result and len(result["candidates"]) > 0:
-                return result["candidates"][0]["content"]["parts"][0]["text"]
+            if "choices" in result and len(result["choices"]) > 0:
+                return result["choices"][0]["message"]["content"]
 
             return None
 
+    except urllib.error.HTTPError as e:
+        print(f"   ❌ HTTP error: {e.code} - {e.reason}")
+        return None
     except Exception as e:
-        print(f"   ❌ Gemini API error: {e}")
+        print(f"   ❌ API error: {e}")
         return None
 
 # ============================================================
@@ -93,7 +111,7 @@ SEMANTIC_CLUSTER_PROMPT = """Bạn là trợ lý nhóm câu hỏi Discord.
 Các câu hỏi:
 {questions}
 
-Tìm các câu hỏi có cùng ý nghĩa và nhóm chúng lại. Trả lời theo format:
+Tìm các câu hỏi có cùng ý nghĩa và nhóm chúng lại. Trả lời theo format JSON:
 {{
   "clusters": [
     {{"representative": "câu hỏi đại diện", "similar": ["câu 1", "câu 2"]}}
@@ -109,54 +127,47 @@ CHỉ nhóm các câu hỏi THỰC SỰ giống nhau về ý nghĩa."""
 def ai_classify_intent(question: str) -> Dict:
     """
     Dùng AI để phân loại intent.
-
-    Returns:
-        {"intent": str, "confidence": float}
     """
     if not API_KEY:
-        # Mock fallback
-        return {"intent": "support", "confidence": 0.5}
+        return {"intent": "other", "confidence": 0.5}
 
-    response = call_gemini(
+    response = call_llm(
         INTENT_CLASSIFY_PROMPT.format(question=question[:500])
     )
 
     if response:
         intent = response.strip().lower()
+        # Clean response - extract first word/line
+        intent = intent.split('\n')[0].strip()
+
         valid_intents = [
             "deadline_xp", "team", "lab_technical", "schedule",
             "support", "github_phoenix", "onboarding", "other"
         ]
 
         if intent in valid_intents:
-            return {"intent": intent, "confidence": 0.9}
+            return {"intent": intent, "confidence": 0.95}
+        elif intent in ["schedule"]:
+            return {"intent": "schedule", "confidence": 0.9}
 
     return {"intent": "other", "confidence": 0.5}
 
 def ai_cluster_questions(questions: List[str]) -> Dict:
     """
     Dùng AI để nhóm câu hỏi tương tự.
-
-    Returns:
-        {"clusters": [{"representative": str, "similar": List[str]}]}
     """
     if not API_KEY:
-        # Mock: mỗi câu 1 cluster
-        return {
-            "clusters": [{"representative": q, "similar": []} for q in questions[:5]]
-        }
+        return {"clusters": [{"representative": q, "similar": []} for q in questions[:5]]}
 
     questions_text = "\n".join([f"- {q[:100]}" for q in questions[:20]])
 
-    response = call_gemini(
+    response = call_llm(
         SEMANTIC_CLUSTER_PROMPT.format(questions=questions_text)
     )
 
     if response:
+        import re
         try:
-            # Parse JSON response
-            import json
-            # Extract JSON from response
             match = re.search(r'\{[\s\S]*\}', response)
             if match:
                 return json.loads(match.group())
@@ -166,9 +177,7 @@ def ai_cluster_questions(questions: List[str]) -> Dict:
     return {"clusters": []}
 
 def ai_generate_summary(questions: List[str], status: str) -> str:
-    """
-    Tạo tóm tắt ngắn cho cluster câu hỏi.
-    """
+    """Tạo tóm tắt ngắn cho cluster câu hỏi."""
     if not API_KEY:
         return f"Tóm tắt {len(questions)} câu hỏi"
 
@@ -178,5 +187,20 @@ def ai_generate_summary(questions: List[str], status: str) -> str:
 
 Trạng thái: {status}"""
 
-    response = call_gemini(prompt)
+    response = call_llm(prompt)
     return response if response else f"{len(questions)} câu hỏi về chủ đề chính"
+
+# ============================================================
+# TEST
+# ============================================================
+if __name__ == "__main__":
+    print("Testing AI Module...")
+    print(f"API Key set: {bool(API_KEY)}")
+    print(f"Base URL: {BASE_URL}")
+    print(f"Model: {MODEL}")
+
+    if API_KEY:
+        test = ai_classify_intent("Deadline nộp Lab2 là khi nào?")
+        print(f"Test classification: {test}")
+    else:
+        print("No API key - skipping test")

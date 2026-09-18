@@ -1,6 +1,7 @@
 # Environment
 .env
 .env.local
+.env.*
 *.env
 
 # Python
@@ -42,3 +43,6 @@ output/
 
 # macOS
 .DS_Store
+
+
+.claude

@@ -1,0 +1,9 @@
+# Discord Q&A Intelligence Pipeline
+# Requirements for CP3 - AI Thực Chiến
+
+# Core dependencies
+pandas>=1.5.0
+numpy>=1.21.0
+
+# Optional: for .env file loading
+python-dotenv>=1.0.0
