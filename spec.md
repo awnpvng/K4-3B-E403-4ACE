@@ -187,9 +187,8 @@ Phân tích 6 case intent chưa đạt: nhầm giữa `schedule` và `deadline_x
 - Hồ Hoàng Phương Anh - sinh viên khóa 4
 - Tô Anh Đức - sinh viên khóa 4
 
-**Kế hoạch validation:** giao một task xử lý 5-10 câu hỏi Discord bằng prototype, đo thời gian tìm câu cần xử lý, ghi nhận câu hỏi nào bị hiểu sai và lấy ít nhất một quote nguyên văn từ mỗi người.
+**Kết quả validation:** Đinh Lê Bình An góp ý `/leaderboard` cần hiển thị thêm câu trả lời đi kèm câu hỏi để ban tổ chức và học viên dễ tập trung xử lý; nhóm đã bổ sung cột `Answered`. Hồ Hoàng Phương Anh xem lại bản sửa và phản hồi “thấy ổn rồi”. Chi tiết: `validation/feedback_log.md`. Nhóm chưa đo thời gian hoàn thành task.
 
-[CẦN BỔ SUNG: feedback log thực tế sau khi willing users dùng prototype. Đây là phần bonus, không bắt buộc.]
 
 ### Multi-prototype
 
@@ -203,7 +202,7 @@ Chưa thực hiện so sánh nhiều prototype. Bản hiện tại chọn pipeli
 | 18/09/2026 | Cho evaluator đọc trực tiếp `eval/golden_set.md` | Tránh kết quả 25 case lệch với golden set 30 case |
 | 18/09/2026 | Điều chỉnh classifier priority và keyword support | Giảm việc support lấn át GitHub/lab/schedule |
 | 18/09/2026 | Chạy lại pipeline/evaluator | Xác nhận 24/30 intent và 107/107 status |
-| [CẦN BỔ SUNG] | Feedback từ user validation | Chưa có log validation thực tế |
+| 18/09/2026 | Bổ sung cột `Answered` trong `/leaderboard` | Đinh Lê Bình An góp ý cần thấy câu trả lời đi kèm câu hỏi; Hồ Hoàng Phương Anh xem lại và phản hồi “thấy ổn rồi” |
 
 ## Các thông tin còn thiếu cần bổ sung trước khi nộp
 
